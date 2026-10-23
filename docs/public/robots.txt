@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: yisouspider
+Allow: /
+
+User-agent: YisouSpider
+Allow: /
+
+User-agent: Sogouspider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+Sitemap: https://tizituijian.world/sitemap.xml

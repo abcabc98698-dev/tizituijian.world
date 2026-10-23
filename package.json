@@ -1,0 +1,28 @@
+{
+  "name": "tizituijian.world",
+  "version": "1.0.0",
+  "description": "梯子推荐与选购决策站 - tizituijian.world",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "build:pagefind": "vitepress build docs && pagefind --site docs/.vitepress/dist"
+  },
+  "keywords": [
+    "梯子推荐",
+    "好用的梯子",
+    "便宜梯子",
+    "稳定梯子",
+    "梯子怎么买",
+    "机场推荐"
+  ],
+  "author": "tizituijian.world",
+  "license": "ISC",
+  "devDependencies": {
+    "pagefind": "^1.4.1",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-pagefind": "^0.3.3",
+    "vue": "^3.5.13"
+  }
+}

@@ -1,0 +1,56 @@
+import fs from 'fs';
+import path from 'path';
+
+export interface ClientItem {
+  name: string;
+  platform: 'windows' | 'android' | 'ios' | 'macos' | 'linux' | 'openwrt';
+  core: string;
+  features: string;
+  officialSource: string;
+  freeOrPaid: 'free' | 'paid' | 'freemium';
+  recommendedRank: number;
+}
+
+export const clients: ClientItem[] = [
+  // Windows
+  { name: 'Clash Verge Rev', platform: 'windows', core: 'Mihomo 内核', features: '订阅管理、规则分流、TUN 模式，新手及进阶主力首选', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 1 },
+  { name: 'v2rayN', platform: 'windows', core: 'Xray / sing-box / Mihomo', features: '多协议支持、详细节点参数管理、单节点快速测试', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 2 },
+  { name: 'FlClash', platform: 'windows', core: 'Mihomo 内核', features: '界面极其简洁美观、轻量级、规则分流', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 3 },
+  { name: 'Hiddify', platform: 'windows', core: 'sing-box 内核', features: '全协议兼容、自动优选节点、远程配置', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 4 },
+  { name: 'Karing', platform: 'windows', core: 'sing-box 系', features: '面向小白的极简规则配置、跨平台一致体验', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 5 },
+  { name: 'Clash Nyanpasu', platform: 'windows', core: 'Mihomo 内核', features: '猫咪美化图形界面、配置增强扩展', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 6 },
+
+  // Android
+  { name: 'v2rayNG', platform: 'android', core: 'Xray 系', features: '协议覆盖全面、支持单节点链接与批量订阅导入、极其省电稳定', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 1 },
+  { name: 'FlClash (Android)', platform: 'android', core: 'Mihomo 内核', features: '现代 Material You 风格UI、Clash 规则分流、操作直观', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 2 },
+  { name: 'Hiddify (Android)', platform: 'android', core: 'sing-box 内核', features: '支持多协议与智能路由，一键开启代理', officialSource: 'Google Play / GitHub', freeOrPaid: 'free', recommendedRank: 3 },
+  { name: 'Karing (Android)', platform: 'android', core: 'sing-box 系', features: '多订阅合并与规则管理，适合新手无缝切换', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 4 },
+  { name: 'sing-box for Android (SFA)', platform: 'android', core: 'sing-box 官方', features: '原生 sing-box 纯净内核、低内存占用与高性能', officialSource: '官方文档 / GitHub', freeOrPaid: 'free', recommendedRank: 5 },
+
+  // iOS
+  { name: 'Shadowrocket (小火箭)', platform: 'ios', core: '独立高性能引擎', features: '国内最普及的规则代理工具、全面支持各种格式订阅、抓包与流量统计', officialSource: '非国区 App Store (约$2.99)', freeOrPaid: 'paid', recommendedRank: 1 },
+  { name: 'Stash', platform: 'ios', core: 'Clash 规则内核', features: 'iOS 上最纯正的 Clash 体验、按需连接、覆写功能与策略组', officialSource: '非国区 App Store (约$3.99)', freeOrPaid: 'paid', recommendedRank: 2 },
+  { name: 'Quantumult X (圈X)', platform: 'ios', core: '自研高性能内核', features: '极度强悍的请求重写、MITM、JavaScript 脚本与精细分流', officialSource: '非国区 App Store (约$7.99)', freeOrPaid: 'paid', recommendedRank: 3 },
+  { name: 'Surge 5', platform: 'ios', core: '网络调试引擎', features: '网络开发与调试天花板、抓包分析、高性能透明接管', officialSource: 'App Store (含内购/买断)', freeOrPaid: 'paid', recommendedRank: 4 },
+  { name: 'Karing (iOS)', platform: 'ios', core: 'sing-box 系', features: '支持直接从 App Store 免费获取、导入多种订阅格式', officialSource: 'App Store (免费可下载地区)', freeOrPaid: 'free', recommendedRank: 5 },
+  { name: 'sing-box (SFI)', platform: 'ios', core: 'sing-box 官方', features: '原生官方 sing-box 客户端，开源纯净', officialSource: 'TestFlight / App Store', freeOrPaid: 'free', recommendedRank: 6 },
+
+  // macOS
+  { name: 'Clash Verge Rev (Mac)', platform: 'macos', core: 'Mihomo (Universal/Apple Silicon)', features: '完美适配 M 系列芯片与 Intel、TUN 虚拟网卡模式、多订阅聚合', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 1 },
+  { name: 'FlClash (Mac)', platform: 'macos', core: 'Mihomo 内核', features: '极简轻量、资源消耗低', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 2 },
+  { name: 'Surge Mac', platform: 'macos', core: 'Surge 引擎', features: 'Mac 平台最强网络接管工具、网关模式分流、增强模式', officialSource: '官方网站授权', freeOrPaid: 'paid', recommendedRank: 3 },
+  { name: 'Hiddify (Mac)', platform: 'macos', core: 'sing-box 内核', features: '跨平台一致体验、多协议无缝切换', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 4 },
+
+  // Linux
+  { name: 'Clash Verge Rev (Linux)', platform: 'linux', core: 'Mihomo', features: '提供 AppImage/DEB/RPM、图形界面、TUN 虚拟网卡', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 1 },
+  { name: 'v2rayA', platform: 'linux', core: 'Xray / V2Ray', features: 'Web UI 控制台、透明代理、适合 Linux 服务器与无头工作站', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 2 },
+  { name: 'sing-box for Desktop', platform: 'linux', core: 'sing-box 官方', features: 'Systemd 服务集成、高性能原生代理', officialSource: '官方文档', freeOrPaid: 'free', recommendedRank: 3 },
+
+  // OpenWrt / 软路由
+  { name: 'OpenClash', platform: 'openwrt', core: 'Mihomo / Clash Meta', features: '全屋智能分流、透明代理、家庭设备免配置梯子', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 1 },
+  { name: 'PassWall', platform: 'openwrt', core: '多核心适配', features: '分流规则丰富、支持多种协议混部、备用节点自动切换', officialSource: 'GitHub 官方发布页', freeOrPaid: 'free', recommendedRank: 2 }
+];
+
+const jsonPath = path.resolve('data/clients.json');
+fs.writeFileSync(jsonPath, JSON.stringify(clients, null, 2), 'utf-8');
+console.log(`Successfully written ${clients.length} clients to data/clients.json`);

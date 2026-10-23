@@ -1,0 +1,2393 @@
+import fs from 'fs';
+import path from 'path';
+
+export interface Plan {
+  name: string;
+  billing: string;
+  price: string;
+  traffic: string;
+  period: string;
+}
+
+export interface SpeedTest {
+  node: string;
+  ping: string;
+  download: string;
+}
+
+export interface Brand {
+  id: string;
+  name: string;
+  slug: string;
+  rank: number;
+  featured: boolean;
+  affLink: string;
+  coupon: string;
+  couponDiscount: string;
+  couponNote?: string;
+  established: string;
+  startPrice: string;
+  protocols: string[];
+  lineType: string;
+  nodeCoverage: string;
+  clientType: 'hybrid' | 'proprietary' | 'third_party';
+  clientDesc: string;
+  dataStatus: 'measured' | 'vendor' | 'historical' | 'unverified';
+  statusLabel: string;
+  testDate: string;
+  testEnvironment: string;
+  streaming: {
+    netflix: boolean | 'partial' | 'unverified';
+    disney: boolean | 'partial' | 'unverified';
+    youtube: boolean | 'partial' | 'unverified';
+    hbo: boolean | 'partial' | 'unverified';
+    tiktok: boolean | 'partial' | 'unverified';
+    spotify: boolean | 'partial' | 'unverified';
+  };
+  aiUnlock: {
+    chatgpt: boolean | 'partial' | 'unverified';
+    claude: boolean | 'partial' | 'unverified';
+    gemini: boolean | 'partial' | 'unverified';
+  };
+  speedtest: SpeedTest[];
+  plans: Plan[];
+  pros: string[];
+  cons: string[];
+  targetAudience: string[];
+  notSuitableFor: string[];
+  summary: string;
+  seoTitle: string;
+  seoDescription: string;
+  uniqueSellingPoint: string;
+}
+
+export const brands: Brand[] = [
+  {
+    id: 'guangsu',
+    name: '光速云',
+    slug: 'guangsu',
+    rank: 1,
+    featured: true,
+    affLink: 'https://sahude.gsyvipaff.com/#/?code=keqgvT5Y',
+    coupon: 'AMM',
+    couponDiscount: '折后约8元/月',
+    couponNote: '最低入门价格约8元/月',
+    established: '2020年',
+    startPrice: '¥8/月 (年付¥99/69GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL专线 + 企业级内网专线（双线路架构）',
+    nodeCoverage: '香港×20、台湾×5、日本×10、新加坡×10、美国×10、马来西亚×2、英国、法国、德国、土耳其、泰国、巴西等',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 支持第三方订阅导入（Clash、Shadowrocket）',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '22ms', download: '529Mbps' },
+      { node: '台湾', ping: '41ms', download: '114Mbps' },
+      { node: '新加坡', ping: '46ms', download: '387Mbps' },
+      { node: '日本', ping: '57ms', download: '135Mbps' },
+      { node: '美国', ping: '143ms', download: '18Mbps' }
+    ],
+    plans: [
+      { name: '光速云·轻量版', billing: '年付', price: '¥99', traffic: '69GB', period: '每月' },
+      { name: '光速云·极速版', billing: '月付', price: '¥25', traffic: '168GB', period: '每月' },
+      { name: '光速云·流光版', billing: '月付', price: '¥34', traffic: '238GB', period: '每月' },
+      { name: '光速云·量子版', billing: '月付', price: '¥68', traffic: '500GB', period: '每月' },
+      { name: '光速云·无界版', billing: '月付', price: '¥138', traffic: '900GB', period: '每月' },
+      { name: '光速云·致敬斯诺克147永久套餐', billing: '一次性付费', price: '¥147', traffic: '247GB不过期', period: '一次性' },
+      { name: '光速云·定制套餐', billing: '月付', price: '¥680', traffic: '500GB', period: '每月' }
+    ],
+    pros: [
+      '2020年持续稳定运营，技术沉淀深厚',
+      'IEPL内网与企业专线双架构，香港节点延迟低至22ms、带宽超500Mbps',
+      '同时提供自研客户端与标准 Clash/Shadowrocket 订阅链接',
+      '提供一次性不过期流量包与低至8元/月的轻量年付档位'
+    ],
+    cons: [
+      'ChatGPT 与 Gemini 需视特定落地节点而定，偶有 IP 判定飘移',
+      '特殊特价商品不支持退款，建议先按月付测试晚高峰稳定性'
+    ],
+    targetAudience: ['追求长期稳定连接的用户', '跨平台多设备办公人群', '流媒体重度播放者', '注重性价比但拒绝劣质中转的用户'],
+    notSuitableFor: ['单次仅需几百兆极低流量且要求无理由退款的用户', '对特定欧美极冷门节点有强依赖的用户'],
+    summary: '光速云是本站综合评测首推的旗舰级服务商。自2020年运营至今，采用IEPL专线与企业级内网双架构，香港与新加坡节点实测表现卓越，提供全平台自研客户端并开放第三方标准订阅。',
+    seoTitle: '光速云怎么样？2026真实测速、套餐价格与节点解锁深度评测',
+    seoDescription: '光速云深度评测：2020年起稳定运营，实测香港22ms延迟与529Mbps带宽。提供套餐价格对比、AI与流媒体解锁实测、优惠码使用说明与选购建议。',
+    uniqueSellingPoint: 'IEPL+企业内网双线路、3档核心套餐跨度、11地区优质节点覆盖、第一主推'
+  },
+  {
+    id: 'feimao',
+    name: '飞猫云',
+    slug: 'feimao',
+    rank: 2,
+    featured: true,
+    affLink: 'https://guangs.flycataff.com/#/?code=6uq0Xe9y',
+    coupon: 'flycat888',
+    couponDiscount: '新用户立减优惠',
+    established: '2023年',
+    startPrice: '¥7/月 (学生版年付¥84/50GB/月)',
+    protocols: ['专线中转', '专属协议'],
+    lineType: '亚太欧美高速专线中转',
+    nodeCoverage: '香港、台湾、新加坡、日本、美国等主流地区',
+    clientType: 'proprietary',
+    clientDesc: '专属定制客户端，下载登录即用，免配置订阅链接',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '21ms', download: '526Mbps' },
+      { node: '台湾', ping: '41ms', download: '116Mbps' },
+      { node: '新加坡', ping: '45ms', download: '413Mbps' },
+      { node: '日本', ping: '54ms', download: '138Mbps' },
+      { node: '美国', ping: '178ms', download: '14Mbps' }
+    ],
+    plans: [
+      { name: '飞猫·学生版', billing: '年付', price: '¥84', traffic: '50GB', period: '每月' },
+      { name: '飞猫·星耀版', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' },
+      { name: '飞猫·星环版', billing: '月付', price: '¥45', traffic: '300GB', period: '每月' },
+      { name: '飞猫·银河版', billing: '月付', price: '¥85', traffic: '600GB', period: '每月' },
+      { name: '飞猫·宇宙版', billing: '月付', price: '¥150', traffic: '1000GB', period: '每月' },
+      { name: '飞猫·不限时套餐', billing: '一次性付费', price: '¥680', traffic: '1000GB', period: '一次性' },
+      { name: '飞猫·定制套餐', billing: '月付', price: '¥550', traffic: '500GB', period: '每月' }
+    ],
+    pros: [
+      '专属客户端开箱即用，免配订阅链接与规则，完全零上手门槛',
+      '香港节点实测21ms低延迟与526Mbps高速带宽',
+      '月均成本低至7元，对学生党和小白用户极度友好',
+      '完整支持 ChatGPT 与主流海外流媒体平台'
+    ],
+    cons: [
+      '主要依赖自研客户端，不支持自定义复杂分流规则与第三方客户端导入',
+      '欧美长距离节点带宽衰减较明显'
+    ],
+    targetAudience: ['不想折腾订阅转换与客户端配置的新手小白', '学生党与预算有限用户', '日常刷视频与AI对话用户'],
+    notSuitableFor: ['需要通过软路由/OpenClash进行局域网透明代理的用户', '极度依赖规则精细分流的高级Geek'],
+    summary: '飞猫云的核心定位是极简易用与新手无感连接。专为嫌订阅配置麻烦的用户打造专属客户端，登录即连。实测香港节点526Mbps，月均7元起，是小白入门的最佳梯子。',
+    seoTitle: '飞猫云新手实测：专属客户端免配置、套餐价格与节点速度评测',
+    seoDescription: '飞猫云怎么样？2026实测飞猫云客户端体验、香港21ms极速节点表现、套餐费率与流媒体AI支持情况，新手一键上手指南。',
+    uniqueSellingPoint: '专属客户端免配置、7元入门档位、新手极速上手'
+  },
+  {
+    id: 'weifeng',
+    name: '微风网络',
+    slug: 'weifeng',
+    rank: 3,
+    featured: true,
+    affLink: 'https://edp01.breezenetaff.com/#/?code=t3huofyI',
+    coupon: 'flat888',
+    couponDiscount: '9折优惠',
+    established: '2023年',
+    startPrice: '¥7/月 (清风年付¥137/100GB/月，折合约11元/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL高速专线 + 原生IP',
+    nodeCoverage: '香港、新加坡、日本、美国等原生IP节点',
+    clientType: 'hybrid',
+    clientDesc: '支持主流第三方订阅导入与多端管理',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '25ms', download: '546Mbps' },
+      { node: '台湾', ping: '40ms', download: '115Mbps' },
+      { node: '新加坡', ping: '43ms', download: '384Mbps' },
+      { node: '日本', ping: '54ms', download: '131Mbps' },
+      { node: '美国', ping: '167ms', download: '17Mbps' }
+    ],
+    plans: [
+      { name: '清风 (Breeze)', billing: '年付', price: '¥137', traffic: '100GB', period: '每月' },
+      { name: '乘风 (Riding)', billing: '月付', price: '¥27', traffic: '200GB', period: '每月' },
+      { name: '破风 (Breaking)', billing: '月付', price: '¥57', traffic: '500GB', period: '每月' },
+      { name: '御风 (Mastery)', billing: '月付', price: '¥127', traffic: '1200GB', period: '每月' },
+      { name: '信风·不限时', billing: '一次性付费', price: '¥200', traffic: '270GB', period: '一次性' },
+      { name: '长风·不限时', billing: '一次性付费', price: '¥370', traffic: '570GB', period: '一次性' }
+    ],
+    pros: [
+      'IEPL内网专线保障高稳定性，香港节点高达546Mbps实测带宽',
+      '提供原生IP节点，Netflix/Disney+与AI工具解锁表现稳健',
+      '7×24小时在线支持，夜间AI智能客服实时值守',
+      '包含两档不限时流量包，适应断续使用场景'
+    ],
+    cons: [
+      '入门年付档100GB对高频下载重度用户偏紧凑',
+      '晚高峰个别欧美节点延迟稍有上升'
+    ],
+    targetAudience: ['注重客服响应与售后支持的用户', '中小流量稳健型办公用户', '需要原生IP解锁流媒体的用户'],
+    notSuitableFor: ['追求数TB级BT下载的极限带宽消耗者'],
+    summary: '微风网络以IEPL专线配合原生IP落地，实测香港节点546Mbps。其最大的服务特色是全天候客服值班体系与良好的流媒体兼容性，整体质感均衡可靠。',
+    seoTitle: '微风网络评测：IEPL专线原生IP、测速表现与客服支持全面解析',
+    seoDescription: '微风网络值得买吗？2026年最新测速报告：香港25ms/546Mbps、IEPL专线架构、套餐价格、流媒体AI解锁能力与优惠码实测。',
+    uniqueSellingPoint: 'IEPL专线+原生IP、7×24全天候客服、高性价比平衡'
+  },
+  {
+    id: 'muguang',
+    name: '暮光加速',
+    slug: 'muguang',
+    rank: 4,
+    featured: true,
+    affLink: 'https://varnexa.twilightaff.com/#/?code=D1LHglg3',
+    coupon: 'muguang5555',
+    couponDiscount: '活动特惠码',
+    established: '2023年',
+    startPrice: '¥9/月 (年付轻量版¥109/70GB/月；基础版月付¥20/120GB/月)',
+    protocols: ['BGP专线', '多协议适配'],
+    lineType: 'BGP智能调度 + 专线级出口',
+    nodeCoverage: '全平台覆盖，亚太与欧美主力枢纽',
+    clientType: 'hybrid',
+    clientDesc: '支持 Windows、macOS、iOS、Android、Linux 全平台多设备同时在线',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '26ms', download: '509Mbps' },
+      { node: '台湾', ping: '40ms', download: '107Mbps' },
+      { node: '新加坡', ping: '43ms', download: '419Mbps' },
+      { node: '日本', ping: '53ms', download: '150Mbps' },
+      { node: '美国', ping: '160ms', download: '19Mbps' }
+    ],
+    plans: [
+      { name: '【暮光·基础版】', billing: '月付', price: '¥20', traffic: '120GB', period: '每月' },
+      { name: '【暮光·标准版】', billing: '月付', price: '¥40', traffic: '240GB', period: '每月' },
+      { name: '【暮光·旗舰版】', billing: '月付', price: '¥100', traffic: '700GB', period: '每月' },
+      { name: '【暮光·至尊版】', billing: '月付', price: '¥180', traffic: '1500GB', period: '每月' },
+      { name: '【暮光·年付轻量版】', billing: '年付', price: '¥109', traffic: '70GB', period: '每月' },
+      { name: '【暮光·不限时轻量包】', billing: '一次性付费', price: '¥219', traffic: '150GB', period: '一次性' },
+      { name: '【暮光·不限时标准包】', billing: '一次性付费', price: '¥529', traffic: '400GB', period: '一次性' },
+      { name: '【暮光·不限时大容量包】', billing: '一次性付费', price: '¥959', traffic: '800GB', period: '一次性' },
+      { name: '独享私人定制节点', billing: '月付', price: '¥680', traffic: '500GB', period: '每月' }
+    ],
+    pros: [
+      'BGP智能多线调度，根据用户宽带运营商动态匹配最优入口',
+      '全平台全协议支持，允许多设备并发连接',
+      '官方提供7×24小时真人客服支持，团队跨境协作适用',
+      '从120GB到1500GB梯度丰富，含独享定制节点'
+    ],
+    cons: [
+      '大容量不限时流量包定价门槛相对较高',
+      '极低预算（<5元/月）用户没有对应月付档位'
+    ],
+    targetAudience: ['团队跨境远程协作', '多台手机/电脑同时在线的数码重度用户', '外贸与商务办公群体'],
+    notSuitableFor: ['单人单设备且对价格极其敏感的偶尔查资料用户'],
+    summary: '暮光加速采用BGP智能入口调度与专线级出口架构，实测香港509Mbps、新加坡419Mbps。主打多设备高并发与跨平台协作，适合家庭与办公团队选用。',
+    seoTitle: '暮光加速深度评测：BGP智能调度、多设备多端支持与晚高峰稳定性',
+    seoDescription: '暮光加速好用吗？评测其BGP专线调度表现、实测延迟带宽数据、多设备并发性能、套餐价格与适用场景全解析。',
+    uniqueSellingPoint: 'BGP智能调度、多设备并发无限制、全平台适配'
+  },
+  {
+    id: 'dalaoyun',
+    name: '大佬云',
+    slug: 'dalaoyun',
+    rank: 5,
+    featured: true,
+    affLink: 'https://qwerty.dalaoyunaff.com/#/?code=jCPLmoWN',
+    coupon: 'dly888',
+    couponDiscount: '季付及以上7折',
+    established: '2024年',
+    startPrice: '¥5.6/月 (年付约5.6元/月 60GB/月)',
+    protocols: ['IEPL专线', 'VLESS'],
+    lineType: 'IEPL专线中转',
+    nodeCoverage: '主流亚太核心枢纽',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方通用订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准网络测速',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'partial',
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'partial',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '32ms', download: '380Mbps' },
+      { node: '日本', ping: '65ms', download: '120Mbps' },
+      { node: '新加坡', ping: '55ms', download: '260Mbps' },
+      { node: '美国', ping: '165ms', download: '15Mbps' }
+    ],
+    plans: [
+      { name: '极限平价·年付版', billing: '年付', price: '¥67', traffic: '60GB', period: '每月' },
+      { name: '平价畅享·季付版', billing: '季付', price: '¥25', traffic: '60GB', period: '每月' }
+    ],
+    pros: [
+      '月均仅5.6元，是目前市面IEPL专线中极其罕见的极限低价',
+      '采用现代 VLESS 协议，传输抗封锁能力优于传统协议',
+      '季付及以上即可享受7折优惠，支出门槛极低'
+    ],
+    cons: [
+      '每月60GB流量适合轻度网页与社交，高刷4K视频容易超额',
+      '高峰期流媒体解锁率不及旗舰大厂，偶有降质'
+    ],
+    targetAudience: ['预算极其有限的学生党', '日常仅用来查阅文献、代码和轻度通信的用户', '备用应急梯子选择'],
+    notSuitableFor: ['重度4K流媒体发烧友', '大流量跨境直播或BT下载者'],
+    summary: '大佬云是5.6元超低价梯子的代表作。在维持IEPL专线与VLESS协议的基础上，把成本压缩到极致，季付享7折，是低预算用户的性价比利器。',
+    seoTitle: '大佬云评测：5.6元极低月费IEPL专线、套餐价格与使用限制分析',
+    seoDescription: '大佬云真实评测：月均5.6元究竟好不好用？IEPL+VLESS架构解析、测速与流量限制说明，低预算用户选购避坑建议。',
+    uniqueSellingPoint: '5.6元月付极限平价、IEPL+VLESS、季付7折'
+  },
+  {
+    id: 'xingdaomeng',
+    name: '星岛梦',
+    slug: 'xingdaomeng',
+    rank: 6,
+    featured: true,
+    affLink: 'https://guangs.xingdaomeng.com/#/?code=1TynBYnR',
+    coupon: 'nmw888',
+    couponDiscount: '专属特惠折扣',
+    established: '2020年',
+    startPrice: '¥8/月 (年付¥96/60GB/月；月付¥25/150GB/月)',
+    protocols: ['Trojan', 'IEPL专线'],
+    lineType: 'IEPL专线，1倍率不限设备',
+    nodeCoverage: '香港、台湾、日本、美国、新加坡、韩国及东南亚核心节点',
+    clientType: 'hybrid',
+    clientDesc: '支持第三方订阅并兼容各类开源客户端',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '27ms', download: '504Mbps' },
+      { node: '台湾', ping: '41ms', download: '103Mbps' },
+      { node: '新加坡', ping: '44ms', download: '411Mbps' },
+      { node: '日本', ping: '57ms', download: '136Mbps' },
+      { node: '美国', ping: '177ms', download: '18Mbps' }
+    ],
+    plans: [
+      { name: '星岛梦·贴心小包', billing: '年付', price: '¥96', traffic: '60GB', period: '每月' },
+      { name: '星岛梦·超量150G', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' },
+      { name: '星岛梦·进阶300G', billing: '月付', price: '¥50', traffic: '300GB', period: '每月' },
+      { name: '星岛梦·闪光500G', billing: '月付', price: '¥70', traffic: '500GB', period: '每月' },
+      { name: '星岛梦·旗舰1T版', billing: '月付', price: '¥130', traffic: '1000GB', period: '每月' },
+      { name: '星岛梦·永久不限时100', billing: '一次性付费', price: '¥100', traffic: '100GB', period: '一次性' },
+      { name: '星岛梦·永久不限时300', billing: '一次性付费', price: '¥300', traffic: '300GB', period: '一次性' },
+      { name: '星岛梦·永久不限时1TB', billing: '一次性付费', price: '¥600', traffic: '1000GB', period: '一次性' },
+      { name: '星岛梦·定制套餐', billing: '月付', price: '¥680', traffic: '500GB', period: '每月' }
+    ],
+    pros: [
+      '2020年开业老牌服务商，运营历史久，抗风险能力强',
+      '全线IEPL专线坚持1倍流量计费，杜绝暗中倍率扣量',
+      '账号完全不限制并发设备数，多端共用划算',
+      '节点覆盖香港、新加坡、台湾、日美韩及东南亚，覆盖面广'
+    ],
+    cons: [
+      '部分冷门亚太节点偶有维护切换',
+      'Gemini 需匹配特定 IP 节点'
+    ],
+    targetAudience: ['需要长期稳定运营的老牌机场用户', '家庭或小型工作室多端共享', '流媒体与TikTok跨区深度用户'],
+    notSuitableFor: ['仅使用单设备且只求单月1元试用的极短期用户'],
+    summary: '星岛梦自2020年起稳定运营，主打IEPL专线、1倍真实流量与不限设备连接数。实测香港节点504Mbps，流媒体全解锁，是老牌稳健之选。',
+    seoTitle: '星岛梦评测：2020年老牌IEPL专线、1倍率不限设备与实测体验',
+    seoDescription: '星岛梦怎么样？老牌机场2026实测报告：香港27ms/504Mbps带宽、不限设备套餐价格表、Trojan协议与AI流媒体解锁能力全景评测。',
+    uniqueSellingPoint: '2020老牌运营、全节点1倍流量真实不缩水、不限设备'
+  },
+  {
+    id: 'ermao',
+    name: '二猫云',
+    slug: 'ermao',
+    rank: 7,
+    featured: true,
+    affLink: 'https://guangs.2maoyunaff.cc/#/?code=7mjvgGbW',
+    coupon: 'ermao5555',
+    couponDiscount: '特惠活动码',
+    established: '2023年',
+    startPrice: '¥7.4/月 (年付小包¥89/60GB/月；白猫月付¥20/130GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL纯专线，不设低价套路',
+    nodeCoverage: '香港、日本、美国等核心地区',
+    clientType: 'hybrid',
+    clientDesc: '独家定制客户端 + 支持开源通用订阅',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: 'partial',
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '22ms', download: '481Mbps' },
+      { node: '台湾', ping: '41ms', download: '118Mbps' },
+      { node: '新加坡', ping: '46ms', download: '407Mbps' },
+      { node: '日本', ping: '53ms', download: '143Mbps' },
+      { node: '美国', ping: '134ms', download: '17Mbps' }
+    ],
+    plans: [
+      { name: '二猫云·不限时套餐', billing: '一次性付费', price: '¥99', traffic: '100GB', period: '一次性' },
+      { name: '二猫年付小包', billing: '年付', price: '¥89', traffic: '60GB', period: '每月' },
+      { name: '二猫云·白猫套餐', billing: '月付', price: '¥20', traffic: '130GB', period: '每月' },
+      { name: '二猫云·橘猫畅玩版', billing: '月付', price: '¥40', traffic: '230GB', period: '每月' },
+      { name: '二猫云·牛奶猫尊享版', billing: '月付', price: '¥80', traffic: '430GB', period: '每月' },
+      { name: '二猫云·黑猫重度用户版', billing: '月付', price: '¥160', traffic: '850GB', period: '每月' }
+    ],
+    pros: [
+      '官方声明拒绝低价跑路套路，技术团队在海外独立维护',
+      '全线IEPL专线，香港节点实测481Mbps，延迟仅22ms',
+      '账号不限设备连接数，并提供专属定制App',
+      '月付20元提供130GB，流量配比合理'
+    ],
+    cons: [
+      '节点范围相对聚焦于港日美，较少涉及冷门中东/南美地区',
+      'Claude 与 Gemini 解锁需要挑选特定节点'
+    ],
+    targetAudience: ['反感低价跑路、看重节点长期存活率的用户', '日常多设备追剧与浏览的用户'],
+    notSuitableFor: ['寻求全球数十国冷门小众IP的用户'],
+    summary: '二猫云走IEPL专线路线，定位中长期稳定使用。全节点不限设备连接数，实测香港481Mbps，拒绝低价走量策略，是稳定至上型用户的安心选择。',
+    seoTitle: '二猫云真实评测：全线IEPL专线、月付20元130G稳定性实测分析',
+    seoDescription: '二猫云跑路风险大吗？评测其IEPL专线性能、香港22ms低延迟、多端不限设备机制与猫咪系列套餐性价比。',
+    uniqueSellingPoint: 'IEPL纯专线、海外技术团队直营、不限设备、长期稳定'
+  },
+  {
+    id: 'wuyou',
+    name: '无忧链接',
+    slug: 'wuyou',
+    rank: 8,
+    featured: true,
+    affLink: 'https://wep01.worryfreeaff.com/#/?code=4ZoSbLdL',
+    coupon: 'wuyou666',
+    couponDiscount: '特价优惠码',
+    established: '2025年',
+    startPrice: '¥6.5/月 (MINI链接年付¥79/40GB/月；舒心月付¥19/100GB/月)',
+    protocols: ['专线中转', '定制协议'],
+    lineType: '高性价比专线中转，无倍率不限速',
+    nodeCoverage: '香港、新加坡、日本、美国核心枢纽，含 TikTok 优化专线',
+    clientType: 'proprietary',
+    clientDesc: '官方专属客户端，下载登录即连，无需订阅配置',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '23ms', download: '531Mbps' },
+      { node: '台湾', ping: '41ms', download: '107Mbps' },
+      { node: '新加坡', ping: '42ms', download: '418Mbps' },
+      { node: '日本', ping: '55ms', download: '147Mbps' },
+      { node: '美国', ping: '145ms', download: '17Mbps' }
+    ],
+    plans: [
+      { name: 'MINI链接', billing: '年付', price: '¥79', traffic: '40GB', period: '每月' },
+      { name: '舒心链接', billing: '月付', price: '¥19', traffic: '100GB', period: '每月' },
+      { name: '省心链接', billing: '月付', price: '¥33', traffic: '200GB', period: '每月' },
+      { name: '随心链接', billing: '月付', price: '¥77', traffic: '500GB', period: '每月' },
+      { name: '忘忧链接', billing: '月付', price: '¥117', traffic: '1000GB', period: '每月' },
+      { name: '100G永久不限时 无忧链接', billing: '一次性付费', price: '¥108', traffic: '100GB', period: '一次性' },
+      { name: '300G永久不限时 无忧链接', billing: '一次性付费', price: '¥298', traffic: '300GB', period: '一次性' }
+    ],
+    pros: [
+      '月均低至6.5元，门槛极低，适合低预算与电商轻度运营',
+      '全线节点1倍率无倍率套路，不限并发设备',
+      '专属客户端开箱即连，无须导入与转换订阅',
+      '提供 TikTok 跨区直连优化，实测香港节点531Mbps'
+    ],
+    cons: [
+      'MINI年付档每月40GB较小，仅适合轻量查阅和社媒运营',
+      '采用专属客户端，无法直接利用Clash覆写规则'
+    ],
+    targetAudience: ['TikTok 运营与跨境电商新手', '每月流量消耗在几十G的轻度使用者', '讨厌客户端配置的技术小白'],
+    notSuitableFor: ['单日下几十GB大文件的重度下载者', '依赖软路由配置的专业玩家'],
+    summary: '无忧链接主打极低门槛与跨境电商轻度场景。折合月费仅6.5元起，配备专属免配App与TikTok直连通道，香港测速531Mbps，是超低预算轻度使用的良选。',
+    seoTitle: '无忧链接评测：月付6.5元起、TikTok直连优化与专属客户端使用评测',
+    seoDescription: '无忧链接机场好用吗？2026实测香港23ms/531Mbps表现、跨境电商与TikTok解锁情况、套餐资费及新手使用技巧。',
+    uniqueSellingPoint: '月费6.5元入门、TikTok跨境直连专线、专属免配客户端'
+  },
+  {
+    id: 'weitu',
+    name: '唯兔云',
+    slug: 'weitu',
+    rank: 9,
+    featured: true,
+    affLink: 'https://guangs.v2yunvipaff.com/#/?code=xIutqOBA',
+    coupon: 'weitu666',
+    couponDiscount: '特价优惠码',
+    established: '2023年',
+    startPrice: '¥6.6/月 (限量款年付¥79.9/45GB/月；节假日月付¥14.9/100GB/月)',
+    protocols: ['IPLC专线', 'Trojan'],
+    lineType: 'IPLC专线直连，三网智能优化',
+    nodeCoverage: '全球60+节点，智能负载均衡覆盖亚太与欧美',
+    clientType: 'hybrid',
+    clientDesc: '支持第三方订阅导入及主流代理工具',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '27ms', download: '500Mbps' },
+      { node: '台湾', ping: '37ms', download: '100Mbps' },
+      { node: '新加坡', ping: '44ms', download: '414Mbps' },
+      { node: '日本', ping: '56ms', download: '147Mbps' },
+      { node: '美国', ping: '179ms', download: '17Mbps' }
+    ],
+    plans: [
+      { name: '唯兔云·年付限量款', billing: '年付', price: '¥79.90', traffic: '45GB', period: '每月' },
+      { name: '唯兔云·年付加强专线', billing: '年付', price: '¥120', traffic: '75GB', period: '每月' },
+      { name: '唯兔云·节假日限时（14.9元）', billing: '月付', price: '¥14.9', traffic: '100GB', period: '每月' },
+      { name: '唯兔云·普通版', billing: '月付', price: '¥19.90', traffic: '150GB', period: '每月' },
+      { name: '唯兔云·进阶版', billing: '月付', price: '¥29.90', traffic: '200GB', period: '每月' },
+      { name: '唯兔云·专业版', billing: '月付', price: '¥59.90', traffic: '500GB', period: '每月' },
+      { name: '唯兔云·至尊版', billing: '月付', price: '¥119.90', traffic: '1000GB', period: '每月' },
+      { name: '唯兔云·永久不限时100G', billing: '一次性付费', price: '¥100', traffic: '100GB', period: '一次性' },
+      { name: '唯兔云·永久不限时200G', billing: '一次性付费', price: '¥160', traffic: '200GB', period: '一次性' },
+      { name: '唯兔云·永久不限时500G', billing: '一次性付费', price: '¥340', traffic: '500GB', period: '一次性' }
+    ],
+    pros: [
+      '采用纯正 IPLC 专线架构与 Trojan 协议，不过公网 GFW，抗封锁能力强',
+      '全线 1 倍真实计费、不限速、不限设备并发连接',
+      '香港与新加坡实测带宽稳定在 400~500Mbps',
+      '三网负载均衡调度，晚高峰波动小'
+    ],
+    cons: [
+      '45GB特惠年付套餐流量较小，需关注用量情况',
+      '官网特惠活动价格变动较为频繁，需以即时结算页为准'
+    ],
+    targetAudience: ['偏好 IPLC 专线抗封锁特性的用户', '跨平台多设备重度流媒体观看者', '日常使用 ChatGPT/Claude 等生产力工具的用户'],
+    notSuitableFor: ['单月需要数千GB进行P2P大流量下载的用户'],
+    summary: '唯兔云走 IPLC 专线与 Trojan 协议路线，主打 1 倍真实计费、不限速与多设备并发。实测香港 500Mbps、新加坡 414Mbps，兼具高性价比与专线稳定性。',
+    seoTitle: '唯兔云 IPLC 专线评测：Trojan 协议、节点测速与套餐价格全对比',
+    seoDescription: '唯兔云怎么样？2026实测唯兔云 IPLC 专线延迟带宽、全流媒体与 AI 解锁表现、最新套餐价格表与选型建议。',
+    uniqueSellingPoint: 'IPLC 纯专线+Trojan、60+节点三网均衡、1倍流量不限设备'
+  },
+  {
+    id: 'firefly',
+    name: 'Firefly',
+    slug: 'firefly',
+    rank: 10,
+    featured: true,
+    affLink: 'https://vip02.fireflyaff.com/#/?code=2n7VURre',
+    coupon: 'firefly',
+    couponDiscount: '8折优惠',
+    couponNote: '年付版不适用',
+    established: '2023年',
+    startPrice: '¥8/月 (年付版¥96/60GB/月；Lite月付¥25/150GB/月)',
+    protocols: ['IPLC专线', 'VLESS'],
+    lineType: 'IPLC 纯专线，原生 IP 出口',
+    nodeCoverage: '香港、新加坡、日本、美国原生 IP 节点',
+    clientType: 'proprietary',
+    clientDesc: '专属定制客户端，下载登录即用，免配置第三方订阅',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '27ms', download: '547Mbps' },
+      { node: '台湾', ping: '39ms', download: '135Mbps' },
+      { node: '新加坡', ping: '42ms', download: '445Mbps' },
+      { node: '日本', ping: '57ms', download: '147Mbps' },
+      { node: '美国', ping: '143ms', download: '30Mbps' }
+    ],
+    plans: [
+      { name: 'Firefly 年付版', billing: '年付', price: '¥96', traffic: '60GB', period: '每月' },
+      { name: 'Firefly Lite', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' },
+      { name: 'Firefly Plus', billing: '月付', price: '¥45', traffic: '300GB', period: '每月' },
+      { name: 'Firefly Blaze', billing: '月付', price: '¥85', traffic: '600GB', period: '每月' },
+      { name: 'Firefly Nova', billing: '月付', price: '¥150', traffic: '1000GB', period: '每月' },
+      { name: 'Firefly 不限时', billing: '一次性付费', price: '¥100', traffic: '100GB', period: '一次性' }
+    ],
+    pros: [
+      '采用优质 IPLC 纯专线接入，香港实测高达 547Mbps，新加坡 445Mbps',
+      '全线部署原生 IP 出口，Netflix 与 Disney+ 极高概率解锁 4K 原生剧集',
+      '全节点不限速，不限客户端数量，海外团队 7×24 技术维护',
+      '专属客户端开箱即连，无复杂配置烦恼'
+    ],
+    cons: [
+      '仅提供专属客户端，不向普通用户开放公开第三方 Clash 订阅链接',
+      '美国欧美跨洋节点实测在 30Mbps 左右，主要优势集中在亚太'
+    ],
+    targetAudience: ['对流媒体原生 IP 解锁要求极高的观影党', '日常依赖 ChatGPT/Claude 生产力工具的上班族', '追求免配置开箱即用的新手'],
+    notSuitableFor: ['必须使用路由器软路由分流的高阶网络极客'],
+    summary: 'Firefly 走 IPLC 专线与原生 IP 出口，实测香港节点跑出 547Mbps。配合专属客户端免配操作与 7×24 客服，是高画质流媒体与 AI 工具用户的品质之选。',
+    seoTitle: 'Firefly 萤火虫评测：IPLC 专线原生 IP、547Mbps 实测与流媒体解锁报告',
+    seoDescription: 'Firefly 机场深度测评：2026年最新测速 547Mbps、原生 IP 对 Netflix/ChatGPT 支持度、专属客户端体验与套餐优惠码全攻略。',
+    uniqueSellingPoint: 'IPLC 纯专线+原生 IP、547Mbps 峰值实测、专属客户端一键连'
+  },
+  // 品牌 11 ~ 28 (从 28个品牌清单抽取)
+  {
+    id: 'yuzhou',
+    name: '宇宙云',
+    slug: 'yuzhou',
+    rank: 11,
+    featured: false,
+    affLink: 'https://wzjc.yuzoucloud.cc/#/?code=yrThwMP1',
+    coupon: 'YUZHOU553',
+    couponDiscount: '新用户8折',
+    established: '早期运营',
+    startPrice: '¥96/年 (起步价)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: '三网优化专线中转',
+    nodeCoverage: '60+ 节点（早期资料）',
+    clientType: 'hybrid',
+    clientDesc: '待核实具体客户端兼容性',
+    dataStatus: 'unverified',
+    statusLabel: '资料待补充 / 待核实',
+    testDate: '待补充',
+    testEnvironment: '暂无可核实基准测速数据',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '宇宙云·入门基础年付', billing: '年付', price: '¥96', traffic: '待核实', period: '每年' }
+    ],
+    pros: ['早期资料记载具备三网优化与负载均衡', '起步门槛96元/年'],
+    cons: ['当期官方套餐及实测参数缺失，需待品牌补充最新运营截图'],
+    targetAudience: ['老用户续费或有针对性测试需求的用户'],
+    notSuitableFor: ['需要详尽实测数据支撑的新手采购'],
+    summary: '宇宙云属于早期收录品牌，目前部分当期数据由于官方页面改版处于待核实状态，建议用户先联系客服确认当前套餐。',
+    seoTitle: '宇宙云使用评测与最新状态说明：套餐价格与线路情况',
+    seoDescription: '宇宙云怎么样？梳理宇宙云历史资料、协议架构、起步价格与当前待核实数据说明。',
+    uniqueSellingPoint: '三网优化调度、新用户8折优惠码'
+  },
+  {
+    id: 'u1s1',
+    name: 'U1S1',
+    slug: 'u1s1',
+    rank: 12,
+    featured: false,
+    affLink: 'https://guangs.vipaff.cc/#/?code=xhX5X22f',
+    coupon: 'akaka',
+    couponDiscount: '专属特惠',
+    established: '2025年',
+    startPrice: '¥8/月 (就是好用年付¥96/60GB/月；普通人真够了月付¥20/120GB/月)',
+    protocols: ['IPLC专线', '多协议适配'],
+    lineType: 'IPLC 专线，官方宣称 2000Mbps 大带宽',
+    nodeCoverage: '香港、台湾、新加坡、日本、美国核心枢纽',
+    clientType: 'hybrid',
+    clientDesc: '不限设备并发，支持第三方订阅',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰基准测速',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '24ms', download: '538Mbps' },
+      { node: '台湾', ping: '39ms', download: '107Mbps' },
+      { node: '新加坡', ping: '46ms', download: '414Mbps' },
+      { node: '日本', ping: '57ms', download: '133Mbps' },
+      { node: '美国', ping: '134ms', download: '20Mbps' }
+    ],
+    plans: [
+      { name: 'u1s1·就是好用包', billing: '年付', price: '¥96', traffic: '60GB', period: '每月' },
+      { name: 'u1s1·普通人真够了包', billing: '月付', price: '¥20', traffic: '120GB', period: '每月' },
+      { name: 'u1s1·你以为用不到包', billing: '月付', price: '¥40', traffic: '300GB', period: '每月' },
+      { name: 'u1s1·瘾大就拉满包', billing: '月付', price: '¥100', traffic: '700GB', period: '每月' },
+      { name: 'u1s1·我全都要包', billing: '月付', price: '¥180', traffic: '1500GB', period: '每月' }
+    ],
+    pros: ['官方宣称 2000Mbps 大带宽，实测香港 538Mbps 表现亮眼', '不限设备并发连接数', '月付20元提供120GB主流规格'],
+    cons: ['2025年新开业品牌，长期存续与晚高峰抗压需长期跟踪'],
+    targetAudience: ['喜欢尝鲜高速新品牌的尝鲜型用户', '多设备高并发家庭用户'],
+    notSuitableFor: ['只认5年以上老牌机场的保守型企业用户'],
+    summary: 'U1S1 作为 2025 年新晋 IPLC 机场，实测香港 538Mbps，主打大带宽与晚高峰不限速，套餐命名接地气，性价比出色。',
+    seoTitle: 'U1S1 机场评测：2025新晋 IPLC 专线、实测 538Mbps 与套餐选购分析',
+    seoDescription: 'U1S1 梯子怎么样？实测 U1S1 晚高峰速度、2000Mbps 标称带宽体验、流媒体与 ChatGPT 支持情况，月付20元档位分析。',
+    uniqueSellingPoint: '2025 新生代 IPLC、标称 2Gbps 带宽、不限设备'
+  },
+  {
+    id: 'lingmao',
+    name: '灵猫网络',
+    slug: 'lingmao',
+    rank: 13,
+    featured: false,
+    affLink: 'https://vip01.civetnet.com/#/?code=8MIAyxak',
+    coupon: 'lmao888',
+    couponDiscount: '8折特惠',
+    couponNote: '年付小包不适用',
+    established: '2025年',
+    startPrice: '¥7.1/月 (年付小包¥85/45GB/月；月付Small¥25/150GB/月)',
+    protocols: ['优化线路中转'],
+    lineType: '中转优化线路，1倍流量不限速',
+    nodeCoverage: '香港、台湾、日本、美国、新加坡等亚洲及欧美节点',
+    clientType: 'proprietary',
+    clientDesc: '专属定制客户端，免配订阅，下载登录即连',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰基准测速',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '22ms', download: '492Mbps' },
+      { node: '台湾', ping: '40ms', download: '109Mbps' },
+      { node: '新加坡', ping: '46ms', download: '409Mbps' },
+      { node: '日本', ping: '57ms', download: '147Mbps' },
+      { node: '美国', ping: '164ms', download: '19Mbps' }
+    ],
+    plans: [
+      { name: '灵猫·年付小包', billing: '年付', price: '¥85', traffic: '45GB', period: '每月' },
+      { name: '灵猫·年付Small', billing: '年付', price: '¥195', traffic: '150GB', period: '每月' },
+      { name: '灵猫·年付Big', billing: '年付', price: '¥295', traffic: '300GB', period: '每月' },
+      { name: '灵猫·月付Small', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' },
+      { name: '灵猫·月付Big', billing: '月付', price: '¥45', traffic: '300GB', period: '每月' }
+    ],
+    pros: ['1倍流量计费且不限设备连接数', '专属免配客户端一键连', '实测香港 492Mbps，流媒体AI解锁全面'],
+    cons: ['无法导出第三方标准 Clash 订阅链接', '新品牌尚需更多时间检验'],
+    targetAudience: ['小白用户', '多端设备协同用户', '轻度社交与观影群体'],
+    notSuitableFor: ['软路由用户与极客规则玩家'],
+    summary: '灵猫网络走中转优化路线，月均 7.1 元起，特点在于 1 倍真实流量与不限设备连接，专属客户端降低上手门槛。',
+    seoTitle: '灵猫网络深度评测：1倍流量不限设备、专属客户端上手与测速报告',
+    seoDescription: '灵猫网络好不好用？2026实测香港492Mbps、专属免配置App体验、不限设备机制与月费性价比评测。',
+    uniqueSellingPoint: '1倍流量不限设备、专属免配App、7.1元入门档'
+  },
+  {
+    id: 'jilian',
+    name: '极连云',
+    slug: 'jilian',
+    rank: 14,
+    featured: false,
+    affLink: 'https://guangs.jlyvipaff.com/#/?code=VM1rKGUu',
+    coupon: 'ji8888',
+    couponDiscount: '专属特惠',
+    established: '2024年',
+    startPrice: '¥18/月 (基础版100GB/月)',
+    protocols: ['IEPL专线', 'VLESS'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '主流亚太与欧美核心枢纽',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 支持第三方客户端导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准测速',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '25ms', download: '460Mbps' },
+      { node: '日本', ping: '58ms', download: '130Mbps' },
+      { node: '美国', ping: '160ms', download: '18Mbps' }
+    ],
+    plans: [
+      { name: '极连·IEPL月付标准', billing: '月付', price: '¥18', traffic: '100GB', period: '每月' },
+      { name: '极连·IEPL季度畅游', billing: '季付', price: '¥50', traffic: '100GB', period: '每月' }
+    ],
+    pros: ['18元档位提供正规 IEPL 专线架构', '明确优化主流 AI 工具访问场景', '同时支持自研 App 与第三方客户端'],
+    cons: ['与同价位光年梯相比流量略少10GB（100G vs 110G）'],
+    targetAudience: ['日常主要使用 ChatGPT/Claude 工具的白领办公人群', '重视 IEPL 专线抗封锁特性的用户'],
+    notSuitableFor: ['寻求5元以下极致便宜梯子的用户'],
+    summary: '极连云定位于 18 元档的针对型 IEPL 专线方案，官方着重强化了对 AI 生产力工具的网络通路优化。',
+    seoTitle: '极连云评测：18元档 IEPL 专线、AI 生产力工具访问实测与体验',
+    seoDescription: '极连云怎么样？18元月付100GB IEPL专线实测报告，ChatGPT/Claude 解锁体验与双客户端支持详解。',
+    uniqueSellingPoint: '18元精选IEPL档位、AI访问专项优化、双客户端支持'
+  },
+  {
+    id: 'guangnian',
+    name: '光年梯',
+    slug: 'guangnian',
+    rank: 15,
+    featured: false,
+    affLink: 'https://guangs.gntaff.com/#/?code=X1FoxjGE',
+    coupon: 'gnt6666',
+    couponDiscount: '专属特惠',
+    established: '2025年',
+    startPrice: '¥18/月 (基础版110GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线直连',
+    nodeCoverage: '亚太及欧美主流枢纽',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准测速',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '26ms', download: '475Mbps' },
+      { node: '日本', ping: '55ms', download: '135Mbps' },
+      { node: '美国', ping: '155ms', download: '19Mbps' }
+    ],
+    plans: [
+      { name: '光年·探索版', billing: '月付', price: '¥18', traffic: '110GB', period: '每月' },
+      { name: '光年·远航版', billing: '月付', price: '¥35', traffic: '240GB', period: '每月' }
+    ],
+    pros: ['18元档提供 110GB，比极连云多 10GB 流量', 'IEPL 专线配合现代 VLESS 协议', '双模式客户端支持'],
+    cons: ['2025 年新品牌，运营稳定性有待跨周期检验'],
+    targetAudience: ['追求性价比与流量充裕兼顾的职场用户', 'AI 办公兼流媒体观影者'],
+    notSuitableFor: ['只信赖数年老牌的保守用户'],
+    summary: '光年梯与极连云同为 18 元档的 IEPL 方案，但光年梯多给 10GB 流量（110GB），在 18 元档位展现了更高的单位流量性价比。',
+    seoTitle: '光年梯评测：18元110GB性价比优势、IEPL专线与AI支持度分析',
+    seoDescription: '光年梯好用吗？对比极连云18元档位表现，IEPL专线实测带宽延迟、流媒体解锁与选型建议。',
+    uniqueSellingPoint: '18元110GB超值流量配比、IEPL+VLESS、双客户端模式'
+  },
+  {
+    id: 'yifan',
+    name: '一翻云',
+    slug: 'yifan',
+    rank: 16,
+    featured: false,
+    affLink: 'https://guangs.1flyunaff.cc/#/register?code=Yr7FhB7r',
+    coupon: 'yfy6666',
+    couponDiscount: '9折优惠',
+    established: '2025年',
+    startPrice: '¥8.2/月 (年付小包¥98/60GB/月；轻享版月付¥20/150GB/月)',
+    protocols: ['Hysteria 2', 'VLESS-Reality', 'Shadowsocks', 'IEPL物理专线'],
+    lineType: '全节点 IEPL 物理专线 + 原生住宅 IP',
+    nodeCoverage: '香港、日本、美国、新加坡、台湾核心五地',
+    clientType: 'hybrid',
+    clientDesc: '支持多种协议客户端自由导入与定制',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '23ms', download: '477Mbps' },
+      { node: '台湾', ping: '40ms', download: '117Mbps' },
+      { node: '新加坡', ping: '42ms', download: '390Mbps' },
+      { node: '日本', ping: '53ms', download: '136Mbps' },
+      { node: '美国', ping: '180ms', download: '20Mbps' }
+    ],
+    plans: [
+      { name: '轻享版', billing: '月付', price: '¥20', traffic: '150GB', period: '每月' },
+      { name: '舒享版', billing: '月付', price: '¥35', traffic: '350GB', period: '每月' },
+      { name: '尊享版', billing: '月付', price: '¥55', traffic: '600GB', period: '每月' },
+      { name: '极致版', billing: '月付', price: '¥95', traffic: '1.2TB', period: '每月' },
+      { name: '98¥·年付小包', billing: '年付', price: '¥98', traffic: '60GB', period: '每月' },
+      { name: '轻享版·不限时包', billing: '一次性付费', price: '¥100', traffic: '100GB', period: '一次性' },
+      { name: '舒享版·不限时包', billing: '一次性付费', price: '¥200', traffic: '250GB', period: '一次性' },
+      { name: '尊享版·不限时包', billing: '一次性付费', price: '¥400', traffic: '500GB', period: '一次性' }
+    ],
+    pros: [
+      '物理 IEPL 专线配合原生住宅 IP，防风控防封锁等级高',
+      '罕见支持 Hysteria 2、VLESS-Reality 和 Shadowsocks 三协议混搭',
+      '提供永久不过期的一次性流量包，避免按月清零浪费',
+      '月付20元给出 150GB 充足配额，实测香港 477Mbps'
+    ],
+    cons: ['未提供免费试用通道，初次体验需购买最小月付验证'],
+    targetAudience: ['协议极客与需要原生住宅 IP 解锁特定业务的用户', '需要永久不限时流量包的非高频用户'],
+    notSuitableFor: ['非付费不愿尝试的用户'],
+    summary: '一翻云采用 IEPL 物理专线搭配原生住宅 IP，支持 Hysteria 2 与 VLESS-Reality 高性能协议，月付20元给150GB，协议自由度极高。',
+    seoTitle: '一翻云评测：IEPL物理专线原生住宅IP、Hysteria 2协议与实测报告',
+    seoDescription: '一翻云怎么样？评测一翻云原生住宅 IP 特色、Hysteria 2 极速传输协议、实测 477Mbps 带宽与不限时流量包配置。',
+    uniqueSellingPoint: 'IEPL物理专线+原生住宅IP、支持Hysteria 2新协议、不限时流量包'
+  },
+  {
+    id: 'sogo',
+    name: 'SOGO云',
+    slug: 'sogo',
+    rank: 17,
+    featured: false,
+    affLink: 'https://guangs.sogoyunaff.cc/#/?code=327Vs0w7',
+    coupon: 'SOGO10000',
+    couponDiscount: '9折优惠',
+    established: '2026年',
+    startPrice: '¥8.17/月 (小包年付¥98/60GB/月；基础版月付¥25/150GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线，三网 BGP 优化',
+    nodeCoverage: '覆盖全球 15 个国家和地区，节点覆盖面在同类中最广',
+    clientType: 'proprietary',
+    clientDesc: '自研客户端，支持 Win/Mac/iOS/Android 及主流软路由一键连接',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: 'partial',
+      tiktok: true,
+      spotify: 'partial'
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: 'partial',
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '26ms', download: '488Mbps' },
+      { node: '台湾', ping: '39ms', download: '118Mbps' },
+      { node: '新加坡', ping: '43ms', download: '401Mbps' },
+      { node: '日本', ping: '57ms', download: '137Mbps' },
+      { node: '美国', ping: '140ms', download: '17Mbps' }
+    ],
+    plans: [
+      { name: '小包-年付版', billing: '年付', price: '¥98', traffic: '60GB', period: '每月' },
+      { name: '基础版', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' },
+      { name: '优选版', billing: '月付', price: '¥45', traffic: '350GB', period: '每月' },
+      { name: '强化版', billing: '月付', price: '¥80', traffic: '550GB', period: '每月' },
+      { name: '顶配版', billing: '月付', price: '¥150', traffic: '1.1TB', period: '每月' },
+      { name: 'SOGO基础餐不限时版', billing: '一次性付费', price: '¥120', traffic: '120GB', period: '一次性' },
+      { name: 'SOGO优选餐不限时版', billing: '一次性付费', price: '¥220', traffic: '250GB', period: '一次性' }
+    ],
+    pros: ['节点覆盖多达 15 个国家和地区，覆盖广度领先', '全线 IEPL 接入三网 BGP 优化', '自研多端客户端覆盖全场景'],
+    cons: ['不提供通用公开第三方订阅链接，仅限自研客户端使用'],
+    targetAudience: ['需要连接多个非主流国家节点的用户', '喜欢自研软件开箱即连的小白用户'],
+    notSuitableFor: ['坚持只用 Clash Verge Rev 订阅管理器的极客'],
+    summary: 'SOGO 云为海外团队运营的 2026 新品牌，拥有 15 国广泛节点覆盖与三网 BGP 专线优化，实测香港 488Mbps，自研 App 体验成熟。',
+    seoTitle: 'SOGO云深度评测：15国节点覆盖、三网BGP专线与自研客户端解析',
+    seoDescription: 'SOGO云怎么样？2026新品牌实测评测：覆盖15国广泛节点、IEPL专线表现、套餐价格表与客户端使用体验报告。',
+    uniqueSellingPoint: '15国广阔节点覆盖、三网BGP专线优化、全平台自研客户端'
+  },
+  {
+    id: 'kexin',
+    name: '可信云',
+    slug: 'kexin',
+    rank: 18,
+    featured: false,
+    affLink: 'https://guangs.kosingaff.com/#/register?code=UYDtNlCY',
+    coupon: 'kkk333',
+    couponDiscount: '专属特惠',
+    established: '2024年',
+    startPrice: '¥25/月 (基础版150GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线直连',
+    nodeCoverage: '主流亚太与美区核心节点',
+    clientType: 'third_party',
+    clientDesc: '标准第三方通用订阅导入，兼容主流客户端',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准测速',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'unverified',
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '28ms', download: '450Mbps' },
+      { node: '日本', ping: '60ms', download: '125Mbps' }
+    ],
+    plans: [
+      { name: '可信·IEPL月付150G', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' }
+    ],
+    pros: [
+      '品牌方极其诚实，在资料中客观注明 AI 与流媒体缺乏统一样本，拒绝夸大虚假宣传',
+      '纯正 IEPL 专线，基础连接延迟低',
+      '支持第三方标准通用订阅'
+    ],
+    cons: ['流媒体与 AI 解锁率需用户根据自身网络环境微调'],
+    targetAudience: ['看重服务商透明度与诚实原则的用户', '以基础网页浏览与代码拉取为主的技术人员'],
+    notSuitableFor: ['追求 100% 盲开所有小众流媒体的娱乐发烧友'],
+    summary: '可信云在 25 元档位以诚实透明度著称，公开标示数据缺口而不做虚假承诺，IEPL 专线提供稳健的基础网络通道。',
+    seoTitle: '可信云真实评测：诚实标注实测边界、25元档 IEPL 专线表现深度剖析',
+    seoDescription: '可信云怎么样？评测可信云透明度数据、IEPL专线连接稳定性、第三方订阅兼容性与选型客观建议。',
+    uniqueSellingPoint: '诚实透明数据口径、无夸大虚假宣传、25元标准IEPL'
+  },
+  {
+    id: 'sujie',
+    name: '速界',
+    slug: 'sujie',
+    rank: 19,
+    featured: false,
+    affLink: 'https://guangs.speedworldaff.cc/#/register?code=xgXzEfZB',
+    coupon: 'sss1111',
+    couponDiscount: '专属特惠',
+    established: '2024年',
+    startPrice: '¥25/月 (基础版150GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '亚太与北美重点枢纽',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅双支持',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准测速',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: true
+    },
+    speedtest: [
+      { node: '香港', ping: '25ms', download: '470Mbps' },
+      { node: '日本', ping: '56ms', download: '140Mbps' },
+      { node: '美国', ping: '150ms', download: '22Mbps' }
+    ],
+    plans: [
+      { name: '速界·AI畅行版', billing: '月付', price: '¥25', traffic: '150GB', period: '每月' }
+    ],
+    pros: [
+      '25元档位唯一明确将 AI 工具（ChatGPT/Claude/Gemini）列为核心保障场景的品牌',
+      '客观提示 AI 可用性受平台策略动态影响，建议合理',
+      '自研客户端与第三方订阅双兼容'
+    ],
+    cons: ['缺少超低价位（<10元）尝鲜套餐'],
+    targetAudience: ['重度依赖 ChatGPT、Claude、Cursor 等 AI 编码与文案工具的生产力用户'],
+    notSuitableFor: ['纯看国内短视频的普通用户'],
+    summary: '速界是 25 元档位针对 AI 访问场景优化最清晰的品牌，强调对主流大模型平台的低延迟连通与低风控率。',
+    seoTitle: '速界评测：25元档专线AI工具访问利器、ChatGPT/Claude 适配实测',
+    seoDescription: '速界机场评测：25元150GB专线套餐性能、针对 AI 生产力大模型的网络优化、实测延迟与使用体验。',
+    uniqueSellingPoint: '25元档AI工具针对性优化、客观平台规则提示、双客户端模式'
+  },
+  {
+    id: 'shanyue',
+    name: '闪跃',
+    slug: 'shanyue',
+    rank: 20,
+    featured: false,
+    affLink: 'https://vip02.flashleapaff.com/#/?code=3lgzm9mm',
+    coupon: 'shanyue',
+    couponDiscount: '8折优惠',
+    couponNote: '仅限闪动/飞跃/瞬移/跃迁，年付版不适用',
+    established: '2024年',
+    startPrice: '¥8/月 (年付版¥96/60GB/月；闪动月付¥24/150GB/月)',
+    protocols: ['IPLC纯专线'],
+    lineType: '骨干网接入顶级 IPLC 纯专线',
+    nodeCoverage: '香港、日本、美国、新加坡、台湾等热门地区原生 IP',
+    clientType: 'proprietary',
+    clientDesc: '专属定制客户端，下载登录即连，免去订阅配置',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '23ms', download: '548Mbps' },
+      { node: '台湾', ping: '38ms', download: '110Mbps' },
+      { node: '新加坡', ping: '44ms', download: '383Mbps' },
+      { node: '日本', ping: '53ms', download: '144Mbps' },
+      { node: '美国', ping: '143ms', download: '18Mbps' }
+    ],
+    plans: [
+      { name: '闪跃年付版', billing: '年付', price: '¥96', traffic: '60GB', period: '每月' },
+      { name: '闪动 (Flicker)', billing: '月付', price: '¥24', traffic: '150GB', period: '每月' },
+      { name: '飞跃 (Leap)', billing: '月付', price: '¥44', traffic: '300GB', period: '每月' },
+      { name: '瞬移 (Teleport)', billing: '月付', price: '¥84', traffic: '600GB', period: '每月' },
+      { name: '跃迁 (Warp)', billing: '月付', price: '¥134', traffic: '1000GB', period: '每月' }
+    ],
+    pros: [
+      '依托骨干网接入的顶级纯 IPLC 专线，香港实测高达 548Mbps',
+      '晚高峰抗抖动与不掉速能力强悍，延迟低至 23ms',
+      '原生 IP 全量解锁主流流媒体与 AI 工具',
+      '专属客户端开箱即连'
+    ],
+    cons: ['无法导出第三方订阅使用 Clash 进行复杂分流'],
+    targetAudience: ['晚高峰极度敏感型用户', '深夜追剧与高频远程办公者'],
+    notSuitableFor: ['软路由透明代理玩家'],
+    summary: '闪跃在 IPLC 专线中定位高端，依托国家级骨干网接入，实测香港 548Mbps，晚高峰表现极度稳固，是重度高频用户的品质之选。',
+    seoTitle: '闪跃评测：顶级 IPLC 纯专线骨干网接入、548Mbps 晚高峰实测与套餐体验',
+    seoDescription: '闪跃机场怎么样？实测闪跃 IPLC 纯专线低延迟、骨干网晚高峰稳定性、原生 IP 解锁能力与专属客户端测评。',
+    uniqueSellingPoint: '顶级IPLC纯专线+骨干网直连、548Mbps峰值带宽、晚高峰极稳'
+  },
+  {
+    id: 'quanqiu',
+    name: '全球云',
+    slug: 'quanqiu',
+    rank: 21,
+    featured: false,
+    affLink: 'https://guangs.gcvipaff.com/#/?code=Ov2nvU9C',
+    coupon: 'qq88',
+    couponDiscount: '8折特惠',
+    established: '2026年',
+    startPrice: '¥8.25/月 (轻量版年付¥99/59GB/月；入门月付¥20/120GB/月)',
+    protocols: ['Trojan', 'Shadowsocks', 'IPLC/IEPL'],
+    lineType: 'IPLC/IEPL 专线中转，2Gbps+ 带宽冗余',
+    nodeCoverage: '全球 60+ 节点，覆盖亚太、美洲、欧洲多地',
+    clientType: 'proprietary',
+    clientDesc: '专属定制客户端，免配置直接登录使用',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '非晚高峰第三方基准测速环境',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '25ms', download: '489Mbps' },
+      { node: '台湾', ping: '37ms', download: '117Mbps' },
+      { node: '新加坡', ping: '45ms', download: '430Mbps' },
+      { node: '日本', ping: '55ms', download: '133Mbps' },
+      { node: '美国', ping: '138ms', download: '18Mbps' }
+    ],
+    plans: [
+      { name: '轻量版', billing: '年付', price: '¥99', traffic: '59GB', period: '每月' },
+      { name: 'BGP 智能优化·入门方案', billing: '月付', price: '¥20', traffic: '120GB', period: '每月' },
+      { name: 'BGP 智能优化·进阶方案', billing: '月付', price: '¥40', traffic: '300GB', period: '每月' },
+      { name: 'BGP 智能优化·高端方案', billing: '月付', price: '¥100', traffic: '700GB', period: '每月' },
+      { name: 'BGP 智能优化·商业方案', billing: '月付', price: '¥180', traffic: '1500GB', period: '每月' },
+      { name: 'BGP 智能优化·不限时轻量包', billing: '一次性付费', price: '¥100', traffic: '100GB', period: '一次性' }
+    ],
+    pros: ['全球 60+ 广泛节点规模，2Gbps+ 独立带宽资源', '双协议保障，香港测速 489Mbps', '支持大容量不限时流量包'],
+    cons: ['使用专属客户端，未提供通用订阅导入'],
+    targetAudience: ['注重全球节点覆盖广度与多地区切换的用户'],
+    notSuitableFor: ['依赖第三方开源客户端管理多机场订阅的用户'],
+    summary: '全球云以 60+ 全球节点规模与 2Gbps+ 专线带宽为特色，月付 20 元起，适合需要跨多地区节点访问的商务与流媒体用户。',
+    seoTitle: '全球云评测：全球60+节点规模、IPLC/IEPL双专线与大带宽体验报告',
+    seoDescription: '全球云怎么样？测评全球云60+节点覆盖、Trojan/SS双协议性能、实测489Mbps带宽与多档套餐性价比。',
+    uniqueSellingPoint: '全球60+节点广布、2Gbps+带宽池、IPLC/IEPL双专线'
+  },
+  {
+    id: 'shandianshu',
+    name: '闪电鼠',
+    slug: 'shandianshu',
+    rank: 22,
+    featured: false,
+    affLink: 'https://qwerty.shandianshuaff.com/#/?code=rUE75iYh',
+    coupon: 'sd88',
+    couponDiscount: '季付及以上7折',
+    established: '2024年',
+    startPrice: '¥5.6/月 (年付约5.6元/月 60GB/月)',
+    protocols: ['IEPL专线', 'VLESS'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '主流亚太核心节点',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准网络测速',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'partial',
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '30ms', download: '360Mbps' },
+      { node: '日本', ping: '62ms', download: '110Mbps' }
+    ],
+    plans: [
+      { name: '极限平价·年付版', billing: '年付', price: '¥67', traffic: '60GB', period: '每月' }
+    ],
+    pros: ['月均 5.6 元极低价格', '正规 IEPL 专线 + VLESS 协议', '季付即享 7 折'],
+    cons: ['月流量 60GB 偏紧凑，仅适合网页浏览与文献查阅'],
+    targetAudience: ['预算极其紧凑的极低预算群体', '备用机场持有者'],
+    notSuitableFor: ['高刷 4K 视频狂热粉'],
+    summary: '闪电鼠属于 5.6 元极限平价专线阵营，提供 IEPL 专线与 VLESS 协议，门槛极低，适合轻度流量与备用防失联需求。',
+    seoTitle: '闪电鼠评测：5.6元极平价 IEPL 专线、VLESS 协议与流量使用指南',
+    seoDescription: '闪电鼠好不好用？月付5.6元真实体验、IEPL专线速度与流量限制说明，低预算备用梯子评测。',
+    uniqueSellingPoint: '5.6元极限低门槛、IEPL+VLESS、季付7折'
+  },
+  {
+    id: 'yunjiexian',
+    name: '云界线',
+    slug: 'yunjiexian',
+    rank: 23,
+    featured: false,
+    affLink: 'https://qwerty.yunjiexianaff.com/?code=HBaZ91c6',
+    coupon: 'yjx888',
+    couponDiscount: '季付及以上7折',
+    established: '2024年',
+    startPrice: '¥5.6/月 (年付约5.6元/月 60GB/月)',
+    protocols: ['IEPL专线', 'VLESS'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '主流亚太核心枢纽',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准网络测速',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'unverified',
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '31ms', download: '350Mbps' },
+      { node: '日本', ping: '63ms', download: '105Mbps' }
+    ],
+    plans: [
+      { name: '平价畅游·年付版', billing: '年付', price: '¥67', traffic: '60GB', period: '每月' }
+    ],
+    pros: ['5.6元超低月均支出', 'IEPL专线抗干扰', '季付及以上7折优惠'],
+    cons: ['联盟推广链接格式未带hash，注册时需注意核对入口正常'],
+    targetAudience: ['低预算极客', '备用节点使用者'],
+    notSuitableFor: ['大流量下载用户'],
+    summary: '云界线同属 5.6 元档 IEPL+VLESS 方案，与闪电鼠、大佬云同规格，为低预算用户提供又一个可靠的平价备用选项。',
+    seoTitle: '云界线评测：5.6元超值IEPL专线、套餐价格与使用注意事项',
+    seoDescription: '云界线怎么样？评测云界线5.6元月费套餐表现、IEPL专线架构与第三方订阅支持情况。',
+    uniqueSellingPoint: '5.6元超值平价、IEPL+VLESS、备选备用'
+  },
+  {
+    id: 'liulianyun',
+    name: '榴莲云',
+    slug: 'liulianyun',
+    rank: 24,
+    featured: false,
+    affLink: 'https://qwerty.liulianyunaff.com#/?code=hS5pvbfE',
+    coupon: 'll88',
+    couponDiscount: '季付及以上7折',
+    established: '2024年',
+    startPrice: '¥5.6/月 (年付约5.6元/月 60GB/月)',
+    protocols: ['IEPL专线', '多协议适配'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '主流亚太核心节点',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准网络测速',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'unverified',
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '33ms', download: '340Mbps' }
+    ],
+    plans: [
+      { name: '特惠轻量年付', billing: '年付', price: '¥67', traffic: '60GB', period: '每月' }
+    ],
+    pros: ['5.6元极致平价', '季付及以上7折'],
+    cons: ['官方资料未统一明确底层协议细节'],
+    targetAudience: ['对协议不敏感、只追求极限性价比的轻度用户'],
+    notSuitableFor: ['对 VLESS/Trojan 协议纯净度有特定要求的极客'],
+    summary: '榴莲云同属 5.6 元平价专线行列，适合对协议细节不深究、只想花最少钱获取可用专线节点的轻度用户。',
+    seoTitle: '榴莲云评测：5.6元档位IEPL专线体验与使用建议',
+    seoDescription: '榴莲云梯子真实评测：月均5.6元套餐性价比、协议支持情况与日常网页浏览实测。',
+    uniqueSellingPoint: '5.6元平价档、季付7折'
+  },
+  {
+    id: 'shenxing',
+    name: '神行加速',
+    slug: 'shenxing',
+    rank: 25,
+    featured: false,
+    affLink: 'https://qwerty.shenxingaff.com/#/?code=gawDQqVE',
+    coupon: 'xs0077',
+    couponDiscount: '新用户7折',
+    established: '2024年',
+    startPrice: '¥14/月 (年付约14元/月 120GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '亚太核心枢纽',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准网络测速',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: 'partial',
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '香港', ping: '26ms', download: '420Mbps' },
+      { node: '日本', ping: '57ms', download: '128Mbps' }
+    ],
+    plans: [
+      { name: '神行·进阶年付版', billing: '年付', price: '¥168', traffic: '120GB', period: '每月' }
+    ],
+    pros: ['14元档位提供 120GB 流量，是 5.6 元档位（60GB）的两倍容量', '采用 VLESS 协议与 IEPL 专线', '新用户享 7 折优惠'],
+    cons: ['缺少小额单月试用选项，更侧重中长期订阅'],
+    targetAudience: ['觉得60G不够用、但又不想买25元档的中度使用人群'],
+    notSuitableFor: ['单次仅需使用几天的短期出差者'],
+    summary: '神行加速切中 14 元/120GB 的黄金中间档位，容量翻倍，新用户享 7 折，是平衡预算与流量用量的务实之选。',
+    seoTitle: '神行加速评测：14元120GB黄金中间档位、IEPL专线与新用户7折分析',
+    seoDescription: '神行加速好用吗？评测14元120GB套餐优势、VLESS协议与IEPL专线实测表现。',
+    uniqueSellingPoint: '14元档位给120GB（双倍流量）、新用户7折、IEPL专线'
+  },
+  {
+    id: 'huanqiuti',
+    name: '环球梯',
+    slug: 'huanqiuti',
+    rank: 26,
+    featured: false,
+    affLink: 'https://qwerty.huanqiutiaff.com/?code=9I4KRNPH',
+    coupon: 'HQ66',
+    couponDiscount: '季付及以上7折',
+    established: '2024年',
+    startPrice: '¥5.6/月 (年付约5.6元/月 60GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '主流亚太核心节点',
+    clientType: 'hybrid',
+    clientDesc: '自研客户端 + 第三方订阅导入',
+    dataStatus: 'measured',
+    statusLabel: '2026-10 实测数据',
+    testDate: '2026-10-19',
+    testEnvironment: '基准测速',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'unverified',
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '32ms', download: '350Mbps' }
+    ],
+    plans: [
+      { name: '环球·平价年付', billing: '年付', price: '¥67', traffic: '60GB', period: '每月' }
+    ],
+    pros: ['5.6元极限平价', 'IEPL专线保障', '季付及以上7折'],
+    cons: ['推广链接格式未含hash，注册需注意页面加载'],
+    targetAudience: ['低预算轻度网民', '多节点备胎持有者'],
+    notSuitableFor: ['高带宽专业下载用户'],
+    summary: '环球梯为 5.6 元档标准 IEPL+VLESS 方案，与闪电鼠、云界线同系，低门槛满足基础翻墙需求。',
+    seoTitle: '环球梯评测：5.6元月费IEPL专线与季付7折优惠解析',
+    seoDescription: '环球梯怎么样？5.6元月付真实体验、IEPL线路与VLESS协议稳定性说明。',
+    uniqueSellingPoint: '5.6元极限低价、IEPL+VLESS'
+  },
+  {
+    id: 'yinxingren',
+    name: '隐形人',
+    slug: 'yinxingren',
+    rank: 27,
+    featured: false,
+    affLink: 'https://yinxingren1.invisibleaff.com/#/?code=kcyEeoJT',
+    coupon: 'moon80',
+    couponDiscount: '8折优惠',
+    couponNote: '优惠码生效中',
+    established: '2024年',
+    startPrice: '¥9.08/月 (星耀风暴年付¥109/80GB/月；白银纪元月付¥24/144GB/月)',
+    protocols: ['IPLC纯专线', '专有传输'],
+    lineType: '企业级 IPLC 专线直连，官方称晚高峰零卡顿',
+    nodeCoverage: '香港、日本、美国、新加坡、台湾等核心枢纽 60+ 节点',
+    clientType: 'proprietary',
+    clientDesc: '自带专属全平台客户端，不提供第三方通用订阅链接',
+    dataStatus: 'vendor',
+    statusLabel: '品牌资料自述 (vendor)',
+    testDate: '品牌方数据口径',
+    testEnvironment: '官方标注晚高峰零卡顿与秒开4K/8K',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: 'partial',
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: 'partial',
+      gemini: 'partial'
+    },
+    speedtest: [],
+    plans: [
+      { name: '星耀风暴 365天不熄', billing: '年付', price: '¥109', traffic: '80GB', period: '每月' },
+      { name: '隐形人 白银纪元', billing: '月付', price: '¥24', traffic: '144GB', period: '每月' },
+      { name: '隐形人 黄金序列', billing: '月付', price: '¥48', traffic: '360GB', period: '每月' },
+      { name: '隐形人 铂金至臻', billing: '月付', price: '¥105', traffic: '750GB', period: '每月' },
+      { name: '隐形人 钻石穹顶', billing: '月付', price: '¥185', traffic: '1.6TB', period: '每月' },
+      { name: '一次性小流量', billing: '一次性付费', price: '¥229', traffic: '160GB', period: '一次性' }
+    ],
+    pros: [
+      '企业级 IPLC 专线直连，官方承诺 1 小时节点故障修复',
+      '节点覆盖 60+ 清单完整公开',
+      '全平台一键配置，多设备同时在线'
+    ],
+    cons: [
+      '完全不提供第三方订阅链接，只能使用官方专有客户端',
+      '部分性能指标源于品牌官方自述，本站未建立独立单项第三方跑分'
+    ],
+    targetAudience: ['追求专属客户端省心体验、信赖企业级 IPLC 专线的用户'],
+    notSuitableFor: ['坚持使用自选第三方客户端与软路由的用户'],
+    summary: '隐形人走企业级 IPLC 专线路线，官方宣传 1 小时修复承诺与晚高峰零卡顿，不提供第三方订阅，纯走自研客户端。',
+    seoTitle: '隐形人评测：企业级 IPLC 专线、专属客户端与品牌自述特性分析',
+    seoDescription: '隐形人梯子好用吗？评测隐形人企业级专线、专属客户端限制、套餐价格表与客观中立使用建议。',
+    uniqueSellingPoint: '企业级IPLC专线、品牌1小时修复承诺、专属免配客户端'
+  },
+  {
+    id: 'tiziyun',
+    name: '梯子云',
+    slug: 'tiziyun',
+    rank: 28,
+    featured: false,
+    affLink: 'https://tiziyun3.ladderaff.com/#/?code=7EmnpHs0',
+    coupon: 'tiziyun',
+    couponDiscount: '专属特惠',
+    established: '2025年',
+    startPrice: '¥7.4/月 (年付约7.4元/月 60GB/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线，2Gbps+ 独立带宽，500Mbps 高峰冗余',
+    nodeCoverage: '香港、日本、新加坡、美国、台湾等 60+ 核心节点',
+    clientType: 'hybrid',
+    clientDesc: '自研全平台客户端（小白一键登录）+ 支持通用订阅（双支持）',
+    dataStatus: 'vendor',
+    statusLabel: '品牌资料自述 (vendor)',
+    testDate: '品牌方数据口径',
+    testEnvironment: '官方标注 2Gbps+ 独立带宽与 500Mbps 冗余',
+    streaming: {
+      netflix: true,
+      disney: true,
+      youtube: true,
+      hbo: true,
+      tiktok: true,
+      spotify: true
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: true,
+      gemini: true
+    },
+    speedtest: [],
+    plans: [
+      { name: '梯子云·特惠年付', billing: '年付', price: '¥89', traffic: '60GB', period: '每月' },
+      { name: '梯子云·畅游月付', billing: '月付', price: '¥22', traffic: '130GB', period: '每月' }
+    ],
+    pros: [
+      '罕见同时兼备“小白一键自研客户端”与“标准第三方订阅”双模式支持',
+      '标称 60+ 节点与 2Gbps+ 独立带宽，含 500Mbps 晚高峰冗余',
+      '海外专业技术团队维护，响应工单速度快'
+    ],
+    cons: ['核心性能指标依托品牌自述数据，未完成独立环境跑分校验'],
+    targetAudience: ['既想新手一键登录、又想在电脑上导入 Clash 的复合型用户'],
+    notSuitableFor: ['只认可第三方公认测速榜单的严苛用户'],
+    summary: '梯子云的最大特色是“自研全平台客户端 + 通用订阅双支持”，兼顾小白极简体验与极客折腾需求，规格出众。',
+    seoTitle: '梯子云评测：自研客户端+通用订阅双支持、2Gbps带宽与套餐分析',
+    seoDescription: '梯子云怎么样？评测梯子云零门槛上手特性、双模式客户端支持、IEPL专线配置与选型建议。',
+    uniqueSellingPoint: '自研客户端+通用订阅双支持、2Gbps带宽+500M冗余、小白一键登录'
+  },
+  // 品牌 29 ~ 42 (从 14个历史品牌清单抽取，明确标注 historical / unverified)
+  {
+    id: 'wgetcloud',
+    name: 'WgetCloud',
+    slug: 'wgetcloud',
+    rank: 29,
+    featured: false,
+    affLink: 'https://invite.wgetcloud.ltd/auth/register?code=VLG2xb',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '老牌运营',
+    startPrice: '季付¥297起 (未有直接月付报价)',
+    protocols: ['Trojan', '优质专线'],
+    lineType: '企业级精品专线服务',
+    nodeCoverage: '香港、台湾、新加坡、日本、美国、韩国、马来西亚等15国及地区',
+    clientType: 'third_party',
+    clientDesc: '支持主流第三方通用订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 2026-05 实测 (待核实)',
+    testDate: '2026-05-02 (历史记录)',
+    testEnvironment: '59节点历史测速全通，日本57.75MB/s、美国55MB/s',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: 'partial',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '日本', ping: '69.4ms', download: '462.04Mbps' },
+      { node: '美国', ping: '170.2ms', download: '440.04Mbps' },
+      { node: '香港', ping: '25.9ms', download: '431.24Mbps' },
+      { node: '新加坡', ping: '55.6ms', download: '422.97Mbps' },
+      { node: '台湾', ping: '41.3ms', download: '407.66Mbps' }
+    ],
+    plans: [
+      { name: '基础专线服务', billing: '季付', price: '¥297', traffic: '230GB/月', period: '每月' },
+      { name: '优质专线服务', billing: '季付', price: '¥327', traffic: '250GB/月', period: '每月' },
+      { name: '精品专线服务', billing: '季付', price: '¥357', traffic: '270GB/月', period: '每月' }
+    ],
+    pros: ['历史测速表现极佳，亚洲节点延迟极低且全通', '定位于高端商务与稳定专线'],
+    cons: ['季付门槛接近300元，没有月付尝鲜选项，价格门槛极高', '数据为历史存档，当前套餐与价格需官网重新核实'],
+    targetAudience: ['预算极其充裕的高净值商务人士', '跨国跨洋办公人群'],
+    notSuitableFor: ['学生党与普通轻度使用者'],
+    summary: 'WgetCloud为知名高端网络代理服务，历史实测显示其专线品质拔尖，但入门即为近300元的高昂季付，适合企业与高预算群体。',
+    seoTitle: 'WgetCloud评测：高端精品专线服务、历史测速表现与价格门槛分析',
+    seoDescription: 'WgetCloud值得买吗？归档评测：2026历史测速462Mbps表现、季付297元套餐价格与高门槛选型建议。',
+    uniqueSellingPoint: '企业级高端精品专线、历史实测极速、高预算优选'
+  },
+  {
+    id: 'baiyueguang',
+    name: '白月光',
+    slug: 'baiyueguang',
+    rank: 30,
+    featured: false,
+    affLink: 'https://www.sibker.com/register?invite_code=gg6puAId',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '历史收录',
+    startPrice: '季付¥66起 (未有直接月付报价)',
+    protocols: ['Shadowsocks'],
+    lineType: '多节点中转',
+    nodeCoverage: '覆盖香港、美国、日本、台湾、新加坡等 79 个地区的名目节点',
+    clientType: 'third_party',
+    clientDesc: '支持第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 2026-07 实测 (待核实)',
+    testDate: '2026-07-17 (历史记录)',
+    testEnvironment: '108节点历史测速记录',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: 'partial',
+      hbo: 'partial',
+      tiktok: 'partial',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [
+      { node: '香港', ping: '160.7ms', download: '114.94Mbps' },
+      { node: '新加坡', ping: '186.8ms', download: '85.22Mbps' },
+      { node: '日本', ping: '202.4ms', download: '77.65Mbps' },
+      { node: '美国', ping: '302.6ms', download: '70.53Mbps' }
+    ],
+    plans: [
+      { name: '小包', billing: '季付', price: '¥66', traffic: '100GB', period: '每月' },
+      { name: '中包', billing: '季付', price: '¥126', traffic: '250GB', period: '每月' },
+      { name: '大包', billing: '季付', price: '¥156', traffic: '400GB', period: '每月' }
+    ],
+    pros: ['季付66元给每月100GB，一次性支出门槛相对不高', '节点地区名目丰富'],
+    cons: ['历史测速显示延迟整体偏高（香港>150ms）', '无直接月付，需在官网重新核对最新有效性'],
+    targetAudience: ['需要极多冷门地区节点命名的用户'],
+    notSuitableFor: ['对近端极速低延迟有严苛要求的电竞或即时交互用户'],
+    summary: '白月光历史资料记载覆盖 79 个名目地区，季付 66 元起，属于地区名目繁多的中转机场，但历史实测延迟偏高。',
+    seoTitle: '白月光机场评测：历史测速数据、79地区节点名目与套餐分析',
+    seoDescription: '白月光机场怎么样？历史记录归档：季付66元套餐、Shadowsocks协议性能与多地区节点客观评价。',
+    uniqueSellingPoint: '多达79个名目地区、季付66元入门档'
+  },
+  {
+    id: 'flyingbird',
+    name: 'FlyingBird',
+    slug: 'flyingbird',
+    rank: 31,
+    featured: false,
+    affLink: '',
+    coupon: 'theo',
+    couponDiscount: '9折优惠',
+    couponNote: '每用户限一次；year85年付85折',
+    established: '历史收录',
+    startPrice: '¥15/月 (青铜月付¥15/100G)',
+    protocols: ['Shadowsocks', 'IPLC全专线'],
+    lineType: '全专线 IPLC，无倍率不限速',
+    nodeCoverage: '主流枢纽',
+    clientType: 'third_party',
+    clientDesc: '第三方标准订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 资料待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '历史站群同源资料，未提供独立单项测速',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '青铜套餐', billing: '月付', price: '¥15', traffic: '100G', period: '每月' },
+      { name: '白银套餐', billing: '月付', price: '¥30', traffic: '200G', period: '每月' },
+      { name: '黄金套餐', billing: '月付', price: '¥75', traffic: '500G', period: '每月' }
+    ],
+    pros: ['全专线 IPLC 定位与无倍率承诺', '月付15元档位完整，支持支付宝与USDT'],
+    cons: ['未提供独立品牌推广入口，当前官网有效性待核实', '缺乏近30天内可靠测速数据'],
+    targetAudience: ['老飞鸟同源站群熟悉用户'],
+    notSuitableFor: ['需要即时注册且入口可验证的新手'],
+    summary: 'FlyingBird（飞鸟机场）以 Shadowsocks 与全专线 IPLC 为主要卖点，曾是一云梯同源核心站点，目前资料属于历史归档。',
+    seoTitle: 'FlyingBird 飞鸟机场评测：IPLC全专线历史记录与现状分析',
+    seoDescription: 'FlyingBird 怎么样？飞鸟机场历史套餐、Shadowsocks协议、优惠码与当前可用性归档解析。',
+    uniqueSellingPoint: '全专线IPLC、无倍率定位、飞鸟站群同源'
+  },
+  {
+    id: 'cyberguard',
+    name: 'CyberGuard',
+    slug: 'cyberguard',
+    rank: 32,
+    featured: false,
+    affLink: 'https://cyberguard.best/#/register?code=AxXNNYng',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '历史收录',
+    startPrice: '¥32/月 (标准套餐350GB/月；半年付¥95/150GB/月)',
+    protocols: ['Trojan', 'VLESS'],
+    lineType: '多地区网络中转',
+    nodeCoverage: '日本、美国、澳大利亚、韩国、德国、法国、阿联酋、台湾、香港等12地区',
+    clientType: 'third_party',
+    clientDesc: '支持第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 2025-06 实测 (待核实)',
+    testDate: '2025-06-21 (历史记录)',
+    testEnvironment: '12地区历史测速归档',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: 'partial',
+      hbo: 'partial',
+      tiktok: 'partial',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'partial',
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '日本', ping: '123.8ms', download: '488.83Mbps' },
+      { node: '韩国', ping: '6000ms', download: '552.8Mbps' },
+      { node: '阿联酋', ping: '345ms', download: '342.76Mbps' },
+      { node: '澳大利亚', ping: '277ms', download: '279.64Mbps' },
+      { node: '美国', ping: '614ms', download: '245.6Mbps' }
+    ],
+    plans: [
+      { name: '150G｜轻量套餐', billing: '半年付', price: '¥95', traffic: '150GB/月', period: '每月' },
+      { name: '350G｜标准套餐', billing: '月付', price: '¥32', traffic: '350GB/月', period: '每月' },
+      { name: '650G｜高速套餐', billing: '月付', price: '¥55', traffic: '650GB/月', period: '每月' },
+      { name: '220G流量包｜不限时', billing: '一次性付费', price: '¥79', traffic: '220GB', period: '一次性' }
+    ],
+    pros: ['月付32元给出350GB大流量', '包含不限时流量包与多欧洲中东节点'],
+    cons: ['历史测速显示部分节点延迟极高，测试时间为2025年旧数据需重新复核'],
+    targetAudience: ['需要阿联酋、德国等中东/欧洲小众节点且流量需求大的用户'],
+    notSuitableFor: ['追求极致超低延迟电竞直连的用户'],
+    summary: 'CyberGuard 历史报价月付 32 元提供 350GB 流量，节点涉及 12 个地区，但历史延迟普遍较高，适合冷门地区大流量使用。',
+    seoTitle: 'CyberGuard 评测：32元350GB大流量、12国地区节点与历史测速',
+    seoDescription: 'CyberGuard 机场好用吗？评测其月付32元350GB套餐、欧洲中东多国节点支持与历史测速数据。',
+    uniqueSellingPoint: '32元350GB大流量、涵盖阿联酋等多国节点'
+  },
+  {
+    id: 'longmaoyun',
+    name: '龙猫云',
+    slug: 'longmaoyun',
+    rank: 33,
+    featured: false,
+    affLink: '',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '历史收录',
+    startPrice: '¥15/月 (VIP1月付¥15/100G)',
+    protocols: ['Shadowsocks', 'IPLC全专线'],
+    lineType: 'SS + IPLC 全专线，标称最高 2000Mbps',
+    nodeCoverage: '亚太及欧美主流',
+    clientType: 'third_party',
+    clientDesc: '第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '一云梯/飞鸟同源站群记录，无独立实测数据',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: 'VIP1', billing: '月付', price: '¥15', traffic: '100G', period: '每月' },
+      { name: 'VIP2', billing: '月付', price: '¥30', traffic: '200G', period: '每月' },
+      { name: 'VIP3', billing: '月付', price: '¥60', traffic: '400G', period: '每月' }
+    ],
+    pros: ['SS与IPLC专线定位，月付15元门槛适中'],
+    cons: ['未提供当前独立入口链接，属于历史同源站群记录'],
+    targetAudience: ['了解同源站群体系的老用户'],
+    notSuitableFor: ['需即时下单且有真人售后要求的新人'],
+    summary: '龙猫云原资料定位 SS 与 IPLC 全专线，最高标称 2000Mbps，已被核实为一云梯/飞鸟同源站群成员，当前列为历史参考。',
+    seoTitle: '龙猫云使用评测：IPLC全专线历史信息与站群背景梳理',
+    seoDescription: '龙猫云怎么样？归档分析龙猫云套餐价格、Shadowsocks专线架构与当前可用状态说明。',
+    uniqueSellingPoint: 'SS+IPLC全专线定位、同源站群背景'
+  },
+  {
+    id: 'fatcat',
+    name: '肥猫云 (FATCAT)',
+    slug: 'fatcat',
+    rank: 34,
+    featured: false,
+    affLink: '',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '历史收录',
+    startPrice: '¥8/月 (年付加强版¥96/60G/月；基础月付¥20/120G/月)',
+    protocols: ['IEPL专线', 'IPLC专线'],
+    lineType: '企业级 IEPL/IPLC 内网专线，抗干扰抗封锁',
+    nodeCoverage: '主流核心枢纽',
+    clientType: 'third_party',
+    clientDesc: '第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '历史品牌库记录，未独立实测',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '年付加强版', billing: '年付', price: '¥96', traffic: '60G', period: '每月' },
+      { name: '基础套餐', billing: '月付', price: '¥20', traffic: '120G', period: '每月' },
+      { name: '标准套餐', billing: '月付', price: '¥40', traffic: '300G', period: '每月' }
+    ],
+    pros: ['企业级内网专线定位，流量梯度完整'],
+    cons: ['未提供当前独立入口链接，缺乏即时实测数据支撑'],
+    targetAudience: ['历史用户与研究专线站群演变的技术人员'],
+    notSuitableFor: ['普通小白直接购买'],
+    summary: '肥猫云原资料定位企业级 IEPL/IPLC 内网专线，强调抗干扰和多流量梯度，当前作为历史档案存档。',
+    seoTitle: '肥猫云 (FATCAT) 评测：企业级专线定位与历史档案梳理',
+    seoDescription: '肥猫云好用吗？解析 FATCAT 历史专线套餐、抗封锁特点与当前数据核查状态。',
+    uniqueSellingPoint: '企业级IEPL/IPLC专线定位、多档流量'
+  },
+  {
+    id: 'tntcloud',
+    name: 'TNTCloud',
+    slug: 'tntcloud',
+    rank: 35,
+    featured: false,
+    affLink: '',
+    coupon: 'TNT85',
+    couponDiscount: '85折优惠',
+    couponNote: '限量包不支持',
+    established: '历史收录',
+    startPrice: '¥10/月 (轻量包季付¥30/60G/月；VIP1月付¥20/110G/月)',
+    protocols: ['IPLC内网专线'],
+    lineType: 'IPLC 内网专线（曾用名 3A加速器 / AAA Speed）',
+    nodeCoverage: '亚太及跨境电商主力节点',
+    clientType: 'third_party',
+    clientDesc: '第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '老牌分站团队历史记录，未独立实测',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '轻量包', billing: '季付', price: '¥30', traffic: '60G', period: '每月' },
+      { name: 'VIP1', billing: '月付', price: '¥20', traffic: '110G', period: '每月' },
+      { name: 'VIP2', billing: '月付', price: '¥40', traffic: '220G', period: '每月' }
+    ],
+    pros: ['季付30元提供限量包，支持跨境电商与 TikTok 直播定制'],
+    cons: ['未提供当前独立入口链接，需官网重新核实'],
+    targetAudience: ['需要跨境电商直播定制方案的用户'],
+    notSuitableFor: ['单月小额试用的普通用户'],
+    summary: 'TNTCloud 曾用名 3A 加速器，资料记录提供 2000Mbps IPLC 专线并支持 TikTok 直播定制，当前列为历史参考。',
+    seoTitle: 'TNTCloud 评测：IPLC内网专线、直播定制与历史套餐梳理',
+    seoDescription: 'TNTCloud 怎么样？3A加速器改版背景、IPLC专线、TikTok直播方案与当前可用性分析。',
+    uniqueSellingPoint: 'IPLC专线、TikTok直播定制、季付限量包'
+  },
+  {
+    id: 'qingyunti',
+    name: '青云梯',
+    slug: 'qingyunti',
+    rank: 36,
+    featured: false,
+    affLink: '',
+    coupon: 'qyt85',
+    couponDiscount: '85折优惠',
+    couponNote: '年付小包不支持',
+    established: '运营6年以上',
+    startPrice: '¥8/月 (年付小包¥96/60G/月；VIP1月付¥25/150G/月)',
+    protocols: ['Shadowsocks', '企业级IPLC'],
+    lineType: '企业级 IPLC 专线，三网优化 + 智能负载均衡',
+    nodeCoverage: '10+ 地区 80+ 节点（曾用名 V4Speed）',
+    clientType: 'third_party',
+    clientDesc: '第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '老牌运营记录，未独立实测近30日数据',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '年付小包', billing: '年付', price: '¥96', traffic: '60G', period: '每月' },
+      { name: 'VIP1', billing: '月付', price: '¥25', traffic: '150G', period: '每月' },
+      { name: 'VIP2', billing: '月付', price: '¥45', traffic: '300G', period: '每月' }
+    ],
+    pros: ['运营6年以上老牌历史，企业级 IPLC 架构', '资料记载支持最高 6Gbps 带宽与企业定制'],
+    cons: ['未提供当前独立入口链接，当前状态标注待核实'],
+    targetAudience: ['熟悉 V4Speed 老牌技术架构的用户'],
+    notSuitableFor: ['需即时线上购买的新用户'],
+    summary: '青云梯（曾用名 V4Speed）为运营 6 年以上的成熟品牌，主打 SS 与企业级 IPLC 专线，当前列为历史参考。',
+    seoTitle: '青云梯评测：6年老牌企业级 IPLC 专线与历史表现分析',
+    seoDescription: '青云梯好用吗？解析青云梯（原V4Speed）历史背景、三网优化专线架构与当前待核实状态。',
+    uniqueSellingPoint: '6年老牌底蕴、企业级IPLC架构、多节点覆盖'
+  },
+  {
+    id: 'shanshuiyun',
+    name: '山水云',
+    slug: 'shanshuiyun',
+    rank: 37,
+    featured: false,
+    affLink: 'https://sldm1.ssyylf.com/#/register?code=YD5iQ888',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '历史收录',
+    startPrice: '¥7.33/月 (64G年付¥88/64GB/月；100G琴月付¥15/100GB/月)',
+    protocols: ['待核实'],
+    lineType: '多节点网络中转',
+    nodeCoverage: '香港、日本、新加坡、美国、台湾、越南、泰国、英国等12地区',
+    clientType: 'third_party',
+    clientDesc: '支持第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 2026-06 实测 (待核实)',
+    testDate: '2026-06-29 (历史记录)',
+    testEnvironment: '27节点历史测速记录',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: 'partial',
+      hbo: 'partial',
+      tiktok: 'partial',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'partial',
+      claude: 'partial',
+      gemini: 'partial'
+    },
+    speedtest: [
+      { node: '美国', ping: '349.3ms', download: '180.29Mbps' },
+      { node: '日本', ping: '229.8ms', download: '160.51Mbps' },
+      { node: '香港', ping: '151.4ms', download: '152.86Mbps' },
+      { node: '新加坡', ping: '179.8ms', download: '142.98Mbps' },
+      { node: '越南', ping: '232ms', download: '87.68Mbps' }
+    ],
+    plans: [
+      { name: '64G/轻量套餐', billing: '年付', price: '¥88', traffic: '64GB/月', period: '每月' },
+      { name: '100G/月-琴', billing: '月付', price: '¥15', traffic: '100GB/月', period: '每月' },
+      { name: '200G/月-棋', billing: '月付', price: '¥25', traffic: '200GB/月', period: '每月' }
+    ],
+    pros: ['月付15元入门门槛低，年付88元折合约7.33元/月', '历史测速覆盖越南、泰国等东南亚近端'],
+    cons: ['历史测速显示亚洲延迟偏高（香港>150ms），当前最新协议与价格待核实'],
+    targetAudience: ['需要东南亚小众节点且预算敏感的用户'],
+    notSuitableFor: ['追求极致近端低延迟的办公群体'],
+    summary: '山水云历史报价月付 15 元提供 100GB，年付折合约 7.33 元/月，包含越南、泰国等节点，当前作为历史档案供对比。',
+    seoTitle: '山水云评测：月付15元入门、东南亚节点与历史测速数据分析',
+    seoDescription: '山水云怎么样？归档评测山水云15元月费套餐、东南亚节点覆盖与历史实测性能。',
+    uniqueSellingPoint: '月付15元低门槛、涵盖越南泰国等多地节点'
+  },
+  {
+    id: 'lingdongyun',
+    name: '灵动云',
+    slug: 'lingdongyun',
+    rank: 38,
+    featured: false,
+    affLink: 'https://varnexa.lingdongaff.com/#/?code=wZvEhEoI',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '2025年',
+    startPrice: '¥8.25/月 (穿云年付¥99/70G/月；拂风月付¥20/100G/月)',
+    protocols: ['VLESS', 'IEPL专线'],
+    lineType: 'IEPL 专线中转，不限速不限设备',
+    nodeCoverage: '主流亚太与欧美',
+    clientType: 'third_party',
+    clientDesc: '第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 2026-07 实测 (待核实)',
+    testDate: '2026-07-20 (历史记录)',
+    testEnvironment: '珠海联通环境历史测速，速度20-80MB/s，HTTPS延迟偏高',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: 'partial',
+      hbo: 'unverified',
+      tiktok: 'partial',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '灵动·拂风', billing: '月付', price: '¥20', traffic: '100G/月', period: '每月' },
+      { name: '灵动·驭浪', billing: '月付', price: '¥50', traffic: '300G/月', period: '每月' },
+      { name: '灵动·穿云', billing: '年付', price: '¥99', traffic: '70G/月', period: '每月' },
+      { name: '灵动·闲云（小流量包）', billing: '一次性付费', price: '¥199', traffic: '150G', period: '一次性' }
+    ],
+    pros: ['IEPL与VLESS架构，历史实测中 OpenAI/ChatGPT 全解锁表现突出', '提供单次流量包与大流量定制'],
+    cons: ['历史测试提示 HTTPS 延迟偏高，TikTok 偶有失败，当前套餐有效性需复核'],
+    targetAudience: ['注重 ChatGPT 解锁且流量需求弹性的用户'],
+    notSuitableFor: ['追求极致短延迟的流媒体发烧友'],
+    summary: '灵动云开业于 2025 年，采用 IEPL+VLESS 架构，历史实测中 AI 解锁率表现良好，当前作为对比参考。',
+    seoTitle: '灵动云评测：2025新专线机场、AI解锁表现与历史测试回顾',
+    seoDescription: '灵动云怎么样？评测灵动云 IEPL 专线性能、OpenAI 解锁表现与套餐流量配置。',
+    uniqueSellingPoint: 'IEPL+VLESS、历史实测AI解锁出色、单次流量包'
+  },
+  {
+    id: 'langwang',
+    name: '浪网',
+    slug: 'langwang',
+    rank: 39,
+    featured: false,
+    affLink: 'https://varnexa.wavenetaff.com/#/?code=xwAM4tTd',
+    coupon: '待核实',
+    couponDiscount: '暂无公开',
+    established: '历史收录',
+    startPrice: '¥30/月 (入门月付¥30/截150G/月；年付标准¥119/80G/月)',
+    protocols: ['IEPL专线'],
+    lineType: 'IEPL 专线中转',
+    nodeCoverage: '主流枢纽',
+    clientType: 'third_party',
+    clientDesc: '第三方订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 未实测 (待核实)',
+    testDate: '历史记录未实测',
+    testEnvironment: '暂无公开单项实测数据',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '浪网 入门', billing: '月付', price: '¥30', traffic: '150G', period: '每月' },
+      { name: '浪网 进阶', billing: '月付', price: '¥70', traffic: '450G', period: '每月' },
+      { name: '浪网 年付标准', billing: '年付', price: '¥119', traffic: '80G', period: '每月' }
+    ],
+    pros: ['标注 IEPL 专线，涵盖入门到商业多层级套餐'],
+    cons: ['缺少具体速度与解锁实测数据，部分套餐参数存在信息遮挡'],
+    targetAudience: ['需核实当前状态的研究型用户'],
+    notSuitableFor: ['普通用户直接购买'],
+    summary: '浪网资料中标注 IEPL 专线，提供多档周期套餐与定制线路，当前归入待核实历史库。',
+    seoTitle: '浪网使用评测与现状说明：IEPL专线历史套餐与待核实字段',
+    seoDescription: '浪网梯子怎么样？解析浪网历史套餐架构、IEPL专线信息与待核实状态说明。',
+    uniqueSellingPoint: 'IEPL专线架构、定制线路支持'
+  },
+  {
+    id: 'edgenova',
+    name: 'EdgeNova',
+    slug: 'edgenova',
+    rank: 40,
+    featured: false,
+    affLink: 'https://work.edgenovaaff.cc/#/register?code=cl3iB5YG',
+    coupon: 'TH888',
+    couponDiscount: '8折优惠',
+    established: '历史收录',
+    startPrice: '¥9/月 (限时年付¥108/45G/月；限时月付¥15/72G/月)',
+    protocols: ['IPLC专线', '高速直连'],
+    lineType: '高速直连 / IPLC，多线路自动分配',
+    nodeCoverage: '主流核心枢纽',
+    clientType: 'third_party',
+    clientDesc: '第三方通用订阅导入',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '历史品牌库记录，未独立逐区测速',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: '限时月付', billing: '月付', price: '¥15', traffic: '72G', period: '每月' },
+      { name: '限时年付', billing: '年付', price: '¥108', traffic: '45G', period: '每月' },
+      { name: '极界·标准', billing: '月付', price: '¥25', traffic: '120G', period: '每月' }
+    ],
+    pros: ['多线路自动分配机制，支持主流国内支付与 USDT', '限时月付15元降低尝试成本'],
+    cons: ['缺少即时逐区测速数据，需重新核实当前入口有效性'],
+    targetAudience: ['追求自动负载分配的用户'],
+    notSuitableFor: ['需要人工精细挑选特定节点IP的用户'],
+    summary: 'EdgeNova（边缘节点）以高速直连与 IPLC 自动多线路分配为特点，提供新用户 8 折优惠码，目前作为历史归档收录。',
+    seoTitle: 'EdgeNova 评测：边缘节点自动分配、IPLC专线与历史优惠信息',
+    seoDescription: 'EdgeNova 机场怎么样？解析边缘节点多线路分配技术、套餐价格与待核实历史数据。',
+    uniqueSellingPoint: '多线路自动分配、IPLC直连、限时15元档'
+  },
+  {
+    id: 'yinghuochong',
+    name: '萤火虫 (历史档案)',
+    slug: 'yinghuochong',
+    rank: 41,
+    featured: false,
+    affLink: 'https://vip02.fireflyaff.com/#/?code=jTp9wSgZ',
+    coupon: 'firefly',
+    couponDiscount: '新用户8折',
+    established: '历史收录',
+    startPrice: '¥8/月 (年付版¥96/60G/月；Lite月付¥25/150G/月)',
+    protocols: ['VLESS', 'IPLC专线'],
+    lineType: 'IPLC 专线，原生 IP',
+    nodeCoverage: '亚太及欧美主流',
+    clientType: 'proprietary',
+    clientDesc: '专属客户端',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '早期品牌库存档，与 Firefly 存在明确同系关联',
+    streaming: {
+      netflix: 'partial',
+      disney: 'partial',
+      youtube: true,
+      hbo: 'unverified',
+      tiktok: 'partial',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: true,
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: 'Firefly年付版', billing: '年付', price: '¥96', traffic: '60G', period: '每月' },
+      { name: 'Firefly Lite', billing: '月付', price: '¥25', traffic: '150G', period: '每月' },
+      { name: 'Firefly Plus', billing: '月付', price: '¥45', traffic: '300G', period: '每月' }
+    ],
+    pros: ['同属 Firefly/微风同系架构，提供原生 IP 定位'],
+    cons: ['为历史重复记录入口，建议以当前活跃的 Firefly（排名10）最新数据为准'],
+    targetAudience: ['用于溯源对比的历史研究用户'],
+    notSuitableFor: ['普通直接采购用户（建议直接使用 Firefly）'],
+    summary: '此记录为历史资料库中的萤火虫早期条目，与排名第 10 的 Firefly 存在同源演进关系，保留作为历史对照档案。',
+    seoTitle: '萤火虫机场历史档案评测：早期资料记录与当前 Firefly 演变对比',
+    seoDescription: '萤火虫机场与 Firefly 关系解析，历史资料归档与最新购买入口指引。',
+    uniqueSellingPoint: 'Firefly历史版本对照档案'
+  },
+  {
+    id: 'sslar',
+    name: 'sslar',
+    slug: 'sslar',
+    rank: 42,
+    featured: false,
+    affLink: '',
+    coupon: 'ko3eTt0w',
+    couponDiscount: '8折优惠',
+    established: '历史收录',
+    startPrice: '¥17/月 (Basic月付¥17/100G/月)',
+    protocols: ['Shadowsocks', 'VLESS', '企业级IEPL'],
+    lineType: '企业级 IEPL + 多线 BGP',
+    nodeCoverage: '主流核心枢纽，涵盖 Eons/Akari/DigitalOcean 机房',
+    clientType: 'proprietary',
+    clientDesc: '自研客户端（Win/Mac/Android），支持远程桌面协助',
+    dataStatus: 'historical',
+    statusLabel: '历史归档 / 待核实',
+    testDate: '2026-08 (历史记录)',
+    testEnvironment: '历史资料记录，未独立实测近30日数据',
+    streaming: {
+      netflix: 'unverified',
+      disney: 'unverified',
+      youtube: 'unverified',
+      hbo: 'unverified',
+      tiktok: 'unverified',
+      spotify: 'unverified'
+    },
+    aiUnlock: {
+      chatgpt: 'unverified',
+      claude: 'unverified',
+      gemini: 'unverified'
+    },
+    speedtest: [],
+    plans: [
+      { name: 'Basic', billing: '月付', price: '¥17', traffic: '100G', period: '每月' },
+      { name: 'Standard', billing: '月付', price: '¥28', traffic: '200G', period: '每月' },
+      { name: 'Premium', billing: '月付', price: '¥36', traffic: '300G', period: '每月' }
+    ],
+    pros: ['企业级 IEPL 专线，自研多端客户端并提供远程协助服务', '月付 17 元起门槛较低'],
+    cons: ['未提供当前独立入口链接，缺乏即时实测数据支撑'],
+    targetAudience: ['需要远程桌面协助配置的商务电脑用户'],
+    notSuitableFor: ['追求现成可用链接的新手'],
+    summary: 'SSLAR 定位企业级 IEPL 与多线 BGP，自研客户端且支持远程桌面协助，当前归入待核实历史库。',
+    seoTitle: 'SSLAR 评测：企业级 IEPL 专线、远程协助支持与历史套餐说明',
+    seoDescription: 'SSLAR 梯子怎么样？解析 SSLAR 企业级线路、多平台自研客户端与历史归档信息。',
+    uniqueSellingPoint: '企业级IEPL+BGP、支持远程协助、自研客户端'
+  }
+];
+
+// 将数据同时写出为 data/brands.json
+const jsonPath = path.resolve('data/brands.json');
+fs.writeFileSync(jsonPath, JSON.stringify(brands, null, 2), 'utf-8');
+console.log(`Successfully written ${brands.length} brands to data/brands.json`);
